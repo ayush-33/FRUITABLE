@@ -1,0 +1,65 @@
+<% layout("/layouts/boilerplate") %>
+<div class="row mt-3">
+  <div class="col-8 offset-2">
+    <h3>Add your Product</h3>
+    <form method="post" action="/product" novalidate class="needs-validation">
+      <div class="mb-3">
+        <label for="name" class="form-label">Enter name</label>
+        <input
+          name="product[name]"
+          placeholder="Enter name"
+          type="text"
+          class="form-control"
+          required
+        />
+        <div class="valid-feedback">Title Looks Good</div>
+      </div>
+      <div class="mb-3">
+        <label for="category" class="form-label">Enter Category</label>
+        <input
+          name="product[category]"
+          placeholder="Enter category"
+          type="text"
+          class="form-control"
+          required
+        />
+        <div class="invalid-feedback">Please Define Category</div>
+      </div>
+      <div class="mb-3">
+        <label for="description" class="form-label">Enter description</label>
+        <textarea
+          name="product[description]"
+          class="form-control"
+          required
+        ></textarea>
+        <div class="invalid-feedback">Please Enter Short Description</div>
+      </div>
+      <div class="mb-3">
+        <label for="image" class="form-label">Enter Url</label>
+        <input
+          name="product[image][url]"
+          placeholder="Enter Url"
+          type="url"
+          class="form-control"
+          required
+        />
+      </div>
+      <div class="mb-3">
+        <label for="price" class="form-label">Enter price</label>
+        <input
+          name="product[price]"
+          placeholder="Enter price"
+          class="form-control"
+          required
+        />
+        <div class="invalid-feedback">Please Enter Valid Price</div>
+      </div>
+      <button
+        class="btn btn-dark add-btn mb-3"
+        style="background-color: #fe424d !important; border: none !important"
+      >
+        Add
+      </button>
+    </form>
+  </div>
+</div>

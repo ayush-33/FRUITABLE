@@ -1,0 +1,81 @@
+<% layout("/layouts/boilerplate") %>
+<style>
+  .image {
+    position: relative;
+    width: 100%;
+  }
+
+  .category {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    background-color: #f0c14b;
+    color: white;
+    padding: 10px 10px;
+    border-radius: 15px;
+    font-size: 1.2rem;
+  }
+  .img {
+    height: 40vh !important;
+    width: 100% !important;
+    border-radius: 1rem;
+    object-fit: cover !important;
+  }
+
+  .card-title {
+    font-size: 26px !important ;
+  }
+
+  .description {
+    font-size: 20px !important;
+  }
+
+  .edit-btn {
+    background-color: #fe424d !important;
+    border: none !important;
+  }
+
+  .btns {
+    display: flex;
+  }
+</style>
+<div class="row">
+  <div class="col-8 offset-2">
+    <div class="show-card">
+      <div class="image">
+        <img
+          src="<%= product.image.url%>"
+          class="card-img-top img img-fluid"
+          alt="image "
+        />
+        <span class="category"><%= product.category %></span>
+      </div>
+      <div class="card-body">
+        <h5 class="card-title mt-3"><b><%= product.name%></b></h5>
+        <p class="card-text text-center description mt-3">
+          <%= product.description %>
+        </p>
+        <p class="price">
+          <b>&#8377;<%= product.price %> / kg</b>
+        </p>
+        <button class="btn add-to-cart">
+          <i class="fa-solid fa-lock"></i> Add to cart
+        </button>
+        <br />
+        <div class="btns mt-3">
+          <a
+            href="/product/<%=product._id%>/edit"
+            class="btn btn-dark mb-3 col-1 offset-1 edit-btn"
+            >Edit</a
+          >
+          <form
+            method="post"
+            action="/product/<%= product._id%>?_method=DELETE"
+          >
+            <button class="btn btn-dark mb-3 offset-5">Delete</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

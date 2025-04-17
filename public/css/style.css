@@ -1,0 +1,204 @@
+/* .navbar */
+body {
+  font-family: "Raleway", sans-serif !important;
+  overflow-x: hidden;
+}
+
+.container-fluid {
+  width: 100vw;
+  max-width: 100%;
+  height: 90px;
+  padding: 0 !important;
+  margin: 0 !important;
+  background-color: white;
+  border-bottom: 1px solid #ccc;
+}
+
+.navbar {
+  padding: 0 !important;
+  margin: 0 !important;
+  width: 100%;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+}
+
+.navbar-brand {
+  font-weight: bolder !important;
+  font-size: 35px !important;
+  color: #81c408 !important;
+  margin-left: 20px;
+  padding: 0px 40px;
+}
+
+.navbar-nav {
+  display: flex;
+  margin-left: 7rem;
+  gap: 1rem;
+}
+
+.nav-link {
+  color: #0000008c !important;
+  font-size: 18px !important;
+}
+
+.search-bar {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-left: auto;
+}
+
+.search-bar input {
+  width: 250px;
+  padding: 6px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.search-bar button {
+  border: 1px solid orange !important;
+  border-radius: 15px !important;
+  padding: 5px 10px !important;
+  background: #ffffff !important;
+  cursor: pointer;
+  width: 44px;
+  height: 44px;
+}
+
+.icons {
+  display: flex;
+  gap: 2rem;
+  margin-left: 2rem;
+  justify-content: center;
+  align-items: center;
+}
+
+.cart i {
+  width: 32px;
+  height: 28px;
+  color: green;
+  font-size: 28px;
+}
+
+.search {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 16px;
+  height: 16px;
+}
+
+/* Index Page */
+.row {
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+}
+
+.product-card {
+  border: none !important;
+  border-radius: 15px;
+  overflow: hidden;
+  transition: transform 0.3s ease-in-out;
+  width: 100%;
+  height: 100%;
+}
+
+.col {
+  padding: 10px;
+}
+
+.image-container {
+  position: relative;
+  width: 100%;
+}
+
+.category-badge {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  background-color: #f0c14b;
+  color: white;
+  padding: 5px 10px;
+  border-radius: 20px;
+  font-size: 0.9rem;
+}
+
+.product-card:hover {
+  transform: scale(1.03);
+}
+
+.card-img-top {
+  border-radius: 15px 15px 0 0;
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+}
+
+.product-links {
+  text-decoration: none;
+  color: black !important;
+  display: block !important;
+}
+
+.card-body {
+  text-align: center;
+  padding: 1rem;
+  border: 0.01px solid #f0c14b !important;
+  border-radius: 0 0 15px 15px;
+  background: #ffffff !important;
+  color: black !important;
+}
+
+.card-title {
+  font-weight: 400 !important;
+  font-size: 20px !important;
+  color: #45595b !important;
+}
+
+.description {
+  font-size: 16px;
+  color: #747d88 !important;
+  max-width: 280px;
+  line-break: 1rem;
+  word-wrap: break-word;
+  height: 72px;
+}
+
+.price {
+  font-size: 22px !important;
+  color: #45595b !important;
+  font-weight: 500 !important;
+}
+
+.add-to-cart {
+  background-color: white !important;
+  color: green !important;
+  border: 1px solid #f0c14b !important;
+  padding: 10px 15px !important;
+  font-size: 1rem !important;
+  border-radius: 20px !important;
+  cursor: pointer !important;
+  transition: transform 0.3s !important;
+  font-size: 15px !important;
+  transition: all 0.3s ease-in-out !important;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-weight: 500;
+}
+
+.add-to-cart:hover {
+  background-color: #ddb347 !important;
+  color: white !important;
+}
+
+.add-to-cart i {
+  margin-right: 5px !important;
+  font-size: 1.2rem !important;
+}
+
+.container {
+  flex: 1; /* Makes content expand and push footer to bottom */
+}

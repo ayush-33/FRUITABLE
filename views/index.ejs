@@ -1,0 +1,32 @@
+<% layout("/layouts/boilerplate") %>
+
+<div class="row row-cols-lg-4 row-cols-md-2 row-cols-sm-1 mt-3">
+  <% allitems.forEach((product) => { %>
+  <div class="col h-100">
+    <a href="/product/<%= product._id %>" class="product-links">
+      <div class="card product-card h-100">
+        <div class="image-container">
+          <img
+            src="<%= product.image.url %>"
+            alt="Product Image"
+            class="card-img-top"
+          />
+          <span class="category-badge"><%= product.category %></span>
+        </div>
+        <div class="card-body">
+          <h5 class="card-title"><b><%= product.name %></b></h5>
+          <p class="card-text text-center description">
+            <%= product.description %>
+          </p>
+          <p class="price">
+            <b> &#8377;<%= product.price.toLocaleString("en-IN") %> / kg </b>
+          </p>
+          <button class="btn add-to-cart">
+            <i class="fa-solid fa-lock"></i> Add to cart
+          </button>
+        </div>
+      </div>
+    </a>
+  </div>
+  <% }); %>
+</div>
