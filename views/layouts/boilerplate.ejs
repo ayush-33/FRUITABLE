@@ -25,7 +25,10 @@
   </head>
   <body>
     <%- include('../includes/navbar.ejs') %>
-    <div class="box"><%- body %></div>
+    <div class="box">
+    <%- include('../includes/flash.ejs') %>
+      <%- body %>
+    </div>
     <%- include("../includes/footer.ejs") %>
   </body>
 </html>

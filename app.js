@@ -8,6 +8,11 @@ const methodOverride = require("method-override");
 const ejsMate = require("ejs-mate");
 const ExpressError = require("./utils/ExpressError.js");
 
+const session = require("express-session");
+const MongoStore = require("connect-mongo");
+const cookieParser = require("cookie-parser");
+const flash = require("connect-flash");
+app.use(cookieParser());
 
 const productRouter = require("./router/product.js");
 
@@ -31,6 +36,33 @@ app.use(methodOverride("_method"));
 app.use(express.static(path.join(__dirname, "/public")));
 app.use(express.static("public"));
 
+const store = MongoStore.create({
+    mongoUrl : "mongodb://127.0.0.1:27017/Fruitable" ,
+    crypto : {
+    secret : "SecretCode",
+    },
+    touchAfter : 24 * 3600,
+});
+store.on("error", (err) => {
+    console.log("error in mongodb store", err);
+})
+
+
+const sessionOptions = {
+    store ,
+    secret : "SecretCode",
+    resave : false,
+    saveUninitialized : false,
+    cookie : {
+        expires: Date.now() + 1000 * 7 * 24 * 60 * 60 ,
+        maxAge : 1000 * 7 * 24 * 60 * 60 ,
+        httpOnly : true
+    },
+};
+
+app.use(session(sessionOptions));
+app.use(flash());
+
 //Router
 app.use("/product",productRouter);
 
@@ -38,11 +70,11 @@ app.all("*",(req,res,next)=> {
   next(new ExpressError(404, "Page not Found"));
 })
 
-//error handling 
+
 app.all("*", (req,res,next) => {
   next(new ExpressError(404,"Page not Found"));
-  });
-    
+});
+
 //Error handling middleware
 app.use((err,req,res,next) => {
   let {statusCode = 500,message = "Some Error Occured"} = err;
