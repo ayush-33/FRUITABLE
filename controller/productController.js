@@ -22,7 +22,6 @@ module.exports.showProduct =  async (req, res) => {
 module.exports.createProduct =  async (req, res, next) => {
     const newProduct = new Product(req.body.product);
     await newProduct.save();
-    console.log("item saved to db");
     req.flash("success","New Product Created!");
     res.redirect("/product");
 };

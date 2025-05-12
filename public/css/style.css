@@ -1,14 +1,21 @@
 /* .navbar */
-.box {
-  width: 100% !important;
-  padding: 0 !important;
-  margin: 0 !important;
-}
 body {
   margin: 0 !important;
   padding: 0 !important;
   font-family: "Raleway", sans-serif !important;
   overflow-x: hidden;
+  height: 100%;
+}
+.content-wrapper {
+  display: flex;
+  flex-direction: column;
+    min-height: 100vh;
+}
+.box {
+  width: 100% !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  flex: 1 !important;
 }
 
 .container-fluid {
@@ -91,11 +98,11 @@ body {
 .search {
   display: flex;
   justify-content: center;
-  align-items: center;
-  width: 16px;
-  height: 16px;
+  align-items: center; 
 }
-
+.search-bar button:hover {
+  color: green;
+}
 /* Index Page */
 .row {
   margin-left: 0 !important;

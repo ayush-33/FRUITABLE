@@ -12,9 +12,13 @@ const session = require("express-session");
 const MongoStore = require("connect-mongo");
 const cookieParser = require("cookie-parser");
 const flash = require("connect-flash");
+const passport = require("passport");
+const LocalStrategy = require("passport-local");
+const User = require("./models/user.js");
 app.use(cookieParser());
 
 const productRouter = require("./router/product.js");
+const userRouter = require("./router/user.js");
 
 main()
   .then(() => {
@@ -63,8 +67,23 @@ const sessionOptions = {
 app.use(session(sessionOptions));
 app.use(flash());
 
+app.use(passport.initialize());
+app.use(passport.session());
+passport.use(new LocalStrategy(User.authenticate()));
+
+
+passport.serializeUser(User.serializeUser());
+passport.deserializeUser(User.deserializeUser());
+
+app.use((req, res, next) => {
+    res.locals.success = req.flash("success");
+    res.locals.error = req.flash("error");
+    next();
+});
+
 //Router
 app.use("/product",productRouter);
+app.use("/",userRouter);
 
 app.all("*",(req,res,next)=> {
   next(new ExpressError(404, "Page not Found"));
@@ -78,7 +97,7 @@ app.all("*", (req,res,next) => {
 //Error handling middleware
 app.use((err,req,res,next) => {
   let {statusCode = 500,message = "Some Error Occured"} = err;
-  res.status(statusCode).send({ error: message });
+  res.status(statusCode).render("error.ejs", {err});
 });
 
 app.listen(8080, () => {
