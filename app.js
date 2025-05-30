@@ -19,6 +19,7 @@ app.use(cookieParser());
 
 const productRouter = require("./router/product.js");
 const userRouter = require("./router/user.js");
+const reviewsRouter = require("./router/review.js");
 
 main()
   .then(() => {
@@ -78,11 +79,13 @@ passport.deserializeUser(User.deserializeUser());
 app.use((req, res, next) => {
     res.locals.success = req.flash("success");
     res.locals.error = req.flash("error");
+    res.locals.curUser = req.user;
     next();
 });
 
 //Router
 app.use("/product",productRouter);
+app.use("/product/:id/reviews", reviewsRouter);
 app.use("/",userRouter);
 
 app.all("*",(req,res,next)=> {

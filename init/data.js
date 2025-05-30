@@ -2,6 +2,7 @@ const sampleData = [
   {
     name: "Apple",
     category: "fruit",
+    isFresh : false,
     description: "Fruit",
     image: {
       url: "https://i.pinimg.com/originals/9d/c2/41/9dc2417e68967c6e949d7665b822f020.jpg",
@@ -12,6 +13,7 @@ const sampleData = [
   {
     name: "Banana",
     category: "Banana",
+    isFresh : false,
     description: "Fruit",
     image: {
       url: "https://m.media-amazon.com/images/I/414eAsDCbxL._AC_UL800_QL65_.jpg",
@@ -22,6 +24,7 @@ const sampleData = [
   {
     name: "Mango",
     category: "Mango",
+    isFresh : false,
     description: "Fruit",
     image: {
       url: "https://i.ytimg.com/vi/mXnqLnX9ijY/maxresdefault.jpg",

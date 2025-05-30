@@ -36,6 +36,17 @@
         >
         <div class="invalid-feedback">Please enter short description</div>
       </div>
+      
+      <div class="mb-3">
+        <label for="isFresh" class="form-label">IsFresh</label>
+        <input
+          name="product[isFresh]"
+          value="<%= product.isFresh %>"
+          type="text"
+          class="form-control"
+          required
+        />
+      </div>
       <div class="mb-3">
         <label for="image" class="form-label">Enter URL</label>
         <input

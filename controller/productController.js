@@ -1,8 +1,11 @@
 const Product = require("../models/product.js");
+const { productSchema } = require("../schema.js"); // Adjust path as needed
+const ExpressError = require("../utils/ExpressError");
 
 module.exports.index = async (req, res) => {
-    const allitems = await Product.find({});
-    res.render("products/index.ejs", { allitems });
+const allitems = await Product.find({ isFresh: false });
+const freshItems = await Product.find({ isFresh: true });
+    res.render("products/index.ejs", { allitems ,freshItems });
 };
 
 module.exports.renderForm = (req, res) => {
@@ -11,7 +14,11 @@ module.exports.renderForm = (req, res) => {
 
 module.exports.showProduct =  async (req, res) => {
     let { id } = req.params;
-    let product = await Product.findById(id);
+    let product = await Product.findById(id).populate({path : "reviews",
+        populate : {
+            path : "author", }
+        }).populate("owner");
+        console.log(product.reviews);
     if(!product) {
         req.flash("error","Product you requested for does not exists");
         res.redirect("/product");
@@ -20,10 +27,23 @@ module.exports.showProduct =  async (req, res) => {
 };
 
 module.exports.createProduct =  async (req, res, next) => {
-    const newProduct = new Product(req.body.product);
-    await newProduct.save();
-    req.flash("success","New Product Created!");
-    res.redirect("/product");
+ const { error } = productSchema.validate(req.body);
+ if (error) {
+        // Collect all error messages from Joi
+        const msg = error.details.map(el => el.message).join(", ");
+        req.flash("error", msg);
+        return res.redirect("/product/new");
+    }
+
+    try {
+        const newProduct = new Product(req.body.product);
+        newProduct.owner = req.user._id;
+        await newProduct.save();
+        req.flash("success", "New Product Created!");
+        res.redirect("/product");
+    } catch (err) {
+        next(err);
+    }
 };
 
 module.exports.renderEditForm =  async (req, res) => {

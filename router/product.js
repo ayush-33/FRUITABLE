@@ -2,27 +2,32 @@ const express = require("express");
 const router = express.Router();
 const wrapAsync = require("../utils/wrapAsync.js");
 const Product = require("../models/product.js");
-const {validateProduct} = require("../middleware.js");
+const {isLoggedIn,validateProduct} = require("../middleware.js");
 const productController = require("../controller/productController.js");
+
+
+router.get('/contact', (req, res) => {
+  res.render("products/contact.ejs"); 
+});
 
 router.route("/")
 //index route
 .get(wrapAsync(productController.index))
 //post route
-.post(validateProduct,wrapAsync(productController.createProduct));
+.post(isLoggedIn,validateProduct,wrapAsync(productController.createProduct));
 
 //Router to render form 
-router.get("/new",productController.renderForm);
+router.get("/new",isLoggedIn,productController.renderForm);
 
 router.route("/:id")
 //show route
 .get(wrapAsync(productController.showProduct))
 //put route
-.put(validateProduct,wrapAsync(productController.updateProduct))
+.put(isLoggedIn,validateProduct,wrapAsync(productController.updateProduct))
 //delete route
-.delete(wrapAsync(productController.delete))
+.delete(wrapAsync(isLoggedIn,productController.delete))
 
 //edit form 
-router.get("/:id/edit",wrapAsync(productController.renderEditForm))
+router.get("/:id/edit",isLoggedIn,wrapAsync(productController.renderEditForm))
 
 module.exports = router;

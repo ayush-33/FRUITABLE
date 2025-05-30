@@ -11,6 +11,10 @@ const ProductSchema = new Schema({
   category: {
     type: String,
   },
+  isFresh : {
+    type : Boolean,
+    default : false,
+  },
   description: String,
   price: Number,
   image: {

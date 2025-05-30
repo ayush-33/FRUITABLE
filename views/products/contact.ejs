@@ -1,0 +1,160 @@
+<% layout("layouts/boilerplate") %>
+<style>
+    .contact-wrapper {
+        position: relative;
+        text-align: center;
+    }
+    .contact-wrapper img {
+        width: 100%;
+        height: 170px;
+    }
+    .contact-wrapper h2 {
+        position: absolute;
+        top: 30%;
+        left: 42%;
+        color: white;
+        font-weight: bold;
+        font-size: 35px;
+    }
+    .contact-wrapper a {
+        text-decoration: none;
+    }
+    .list {
+        position: absolute;
+        list-style-type: none;
+        display: flex;
+        flex-wrap: wrap;
+        left: 38%;
+        bottom: 18%;
+    }
+    .same {
+        color: #81c408;
+        font-size: 17px;
+    }
+    .diff {
+        color: #fff;
+        font-size: 17px;
+    }
+    .w-100 {
+    width: 100% !important;
+    }
+    .contact-cont {
+        padding: 3rem !important;
+        border-radius: 10px !important;
+        background-color: #e5e7ea !important;
+    }
+    .contact-head {
+        max-width: 700px;
+        text-align: center;
+        margin: 0 auto;
+    }
+    .contact-head h4 {
+        color: #81c408;
+        font-size: 2rem;
+        font-weight: 600;
+    }
+    .map {
+        height: 100% !important;
+        border-radius: 10px !important;
+    }
+    .map-border {
+        border-radius: 10px !important;
+    }
+    .input {
+    border: 0 !important;
+    padding: 1rem 1rem !important;
+    }
+    .contact-btn {
+    font-weight: 600;
+    background-color: #fff !important;
+    color: #81c408 !important;
+    padding: 1rem 0 !important;
+    border-color: #ffb524 !important;  
+    font-size: 1rem;  
+    }
+    .contact-add {
+        display: flex !important;
+        border-radius: 10px !important;
+        background-color: #fff !important;
+    }
+    .contact-add i {
+        color: #81c408 !important;
+        margin-right: 1.5rem !important;
+        font-weight: 900 !important;
+        font-size: 2rem ;
+    }
+    .contact-add h4 {
+     color: #45595b !important;
+     font-weight: 900 !important;
+    }
+    .contact-add p {
+        color: #747d88 ;
+    }
+    .input:focus {
+        border: 2px solid #81c408 !important;
+         outline: none !important;
+    box-shadow: none !important;
+    }
+</style>
+<div class="contact-wrapper">
+    <img src="/img/contact.jpg" alt="Contact Us" />
+<h2>Contact </h2>
+<ol class="list">
+  <li ><a class="same" href="/product">Home /</a></li>
+  <li ><a class="same" href="/product/new">Add /</a></li>
+  <li ><a class="diff" href="/product/contact">Contact</a></li>
+</ol>
+</div>
+
+<div class="container py-5">
+    <div class="contact-cont">
+    <div class="row g-4">
+    <div class="col-12">
+    <div class="contact-head">
+        <h4>Get in Touch</h4>
+    <p>Have questions or feedback? Send us a message and we'll get back to you soon!</p>
+    </div>
+    </div>
+    <div class="col-12">
+        <div class="map">
+        <iframe class="map-border w-100" style="height: 400px;" 
+         src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d112095.64520377006!2d77.0920499!3d28.6139391!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x390cfd1df38df1e3%3A0x83955541ec47a77!2sNew%20Delhi%2C%20Delhi%2C%20India!5e0!3m2!1sen!2sin!4v1717052380711!5m2!1sen!2sin" 
+       loading="lazy" 
+       referrerpolicy="no-referrer-when-downgrade">
+      </iframe>
+        </div>
+    </div>
+    <div class="col-7">
+        <form action="/product" class="needs-validation">
+        <input type="text" class="w-100 input form-control mb-4 " placeholder="Your Name">
+         <input type="email" class="w-100 input form-control mb-4 " placeholder="Enter Your Email">
+            <textarea class="w-100 form-control input mb-4" rows="5" cols="10" placeholder="Your Message"></textarea>
+            <button class="w-100 contact-btn form-control" type="submit">Submit</button>
+        </form>  
+    </div>
+    <div class="col-lg-5">
+        <div class="contact-add p-4 mb-4">
+            <i class="fas fa-map-marker-alt"></i>
+            <div class="address">
+                <h4>Address</h4>
+                <p class="mb-2">123 Street New Delhi,India</p>
+            </div>
+        </div>
+        <div class="contact-add p-4 mb-4">
+            <i class="fas fa-envelope"></i>
+            <div class="address">
+                <h4>Mail Us</h4>
+                <p class="mb-2">info@example.com</p>
+            </div>
+        </div>
+        <div class="contact-add p-4 mb-4">
+            <i class="fa fa-phone-alt"></i>
+            <div class="address">
+                <h4>Telephone</h4>
+                <p class="mb-2">(+91) 8684890931</p>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+</div>
