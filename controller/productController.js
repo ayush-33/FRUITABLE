@@ -5,12 +5,17 @@ const ExpressError = require("../utils/ExpressError");
 module.exports.index = async (req, res) => {
 const allitems = await Product.find({ isFresh: false });
 const freshItems = await Product.find({ isFresh: true });
-    res.render("products/index.ejs", { allitems ,freshItems });
+    res.render("products/index.ejs", { allitems ,freshItems, currentRoute: "/product" });
 };
 
 module.exports.renderForm = (req, res) => {
-    res.render("products/new.ejs");
+    res.render("products/new.ejs", { currentRoute: "/product/new" });
 };
+
+module.exports.renderShopItems = async (req,res) => {
+    const ShopItems = await Product.find({});
+    res.render("products/shop.ejs", { ShopItems, currentRoute: "/product/shop" });
+}
 
 module.exports.showProduct =  async (req, res) => {
     let { id } = req.params;

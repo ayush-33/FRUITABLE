@@ -8,6 +8,19 @@ const methodOverride = require("method-override");
 const ejsMate = require("ejs-mate");
 const ExpressError = require("./utils/ExpressError.js");
 
+//Redis
+const redis = require('redis');
+const productRouter = require('./router/product');
+
+const client = redis.createClient();
+client.on('error', (err) => console.error('Redis Client Error', err));
+
+(async () => {
+  await client.connect();
+  console.log('✅ Redis connected!');
+  app.locals.redisClient = client; 
+})();
+
 const session = require("express-session");
 const MongoStore = require("connect-mongo");
 const cookieParser = require("cookie-parser");
@@ -17,9 +30,10 @@ const LocalStrategy = require("passport-local");
 const User = require("./models/user.js");
 app.use(cookieParser());
 
-const productRouter = require("./router/product.js");
+// const productRouter = require("./router/product.js");
 const userRouter = require("./router/user.js");
 const reviewsRouter = require("./router/review.js");
+const cartRouter = require("./router/cart.js");
 
 main()
   .then(() => {
@@ -82,11 +96,19 @@ app.use((req, res, next) => {
     res.locals.curUser = req.user;
     next();
 });
+// Middleware to set current route for active link highlighting
+app.use((req, res, next) => {
+  res.locals.currentRoute = req.path;
+  next();
+});
 
 //Router
 app.use("/product",productRouter);
 app.use("/product/:id/reviews", reviewsRouter);
+app.use(express.json()); 
+app.use("/cart",cartRouter);
 app.use("/",userRouter);
+
 
 app.all("*",(req,res,next)=> {
   next(new ExpressError(404, "Page not Found"));

@@ -212,6 +212,7 @@
   font-size: 16px;
   cursor: pointer;
   transition: all 0.3s ease-in-out;
+  text-decoration: none;
 }
 .category-btn.active {
   background-color: #f0c14b;
@@ -458,9 +459,11 @@
 <div class="left-section">
   <p class="tagline">100% Organic Foods</p>
   <h1>Organic Veggies & Fruits Foods</h1>
-  <div class="section-search">
-    <input type="text" placeholder="Search" >
-    <button class="section-btn" type="submit"> Submit Now</button>
+  <div >
+    <form class="section-search" action="/product/search" method="GET">
+    <input type="text" name="q" placeholder="Search" >
+    <button class="section-btn" type="submit">Submit Now</button>
+</form>
   </div>
 </div>
 
@@ -542,18 +545,18 @@
 <div class="section-header">
   <h1 class="section-title" >Our Organic <br>Products</h1>
    <div class="category-buttons">
-    <button class="category-btn active">All Products</button>
-    <button class="category-btn">Vegetables</button>
-    <button class="category-btn">Fruits</button>
-    <button class="category-btn">Bread</button>
-    <button class="category-btn">Meat</button>
-  </div>
+  <button class="category-btn active" data-category="">All Products</button>
+  <button class="category-btn" data-category="Vegetable">Vegetable</button>
+  <button class="category-btn" data-category="Fruit">Fruit</button>
+  <button class="category-btn" data-category="Bread">Bread</button>
+  <button class="category-btn" data-category="Meat">Meat</button>
+</div>
 </div>
 
 <!-- Cards -->
-<div class="outer-card">
+<div class="outer-card" id="static-products">
   <div class="container" >
-  <div class="row row-cols-lg-4 row-cols-md-2 row-cols-sm-1 mt-3">
+  <div class="row row-cols-lg-4 row-cols-md-2 row-cols-sm-1 mt-3" id="product-row">
   <% allitems.forEach((product) => { %>
   <div class="col h-100">
     <a href="/product/<%= product._id %>" class="product-links">
@@ -572,11 +575,11 @@
             <%= product.description %>
           </p>
           <p class="price">
-            <b> &#8377;<%= product.price.toLocaleString("en-IN") %> / kg </b>
+            <b> &#8377;<%= product.price.toFixed(2) %> / kg </b>
           </p>
-          <button class="btn add-to-cart">
+          <!-- <button class="btn add-to-cart">
             <i class="fa-solid fa-lock"></i> Add to cart
-          </button>
+          </button> -->
         </div>
       </div>
     </a>

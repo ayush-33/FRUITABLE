@@ -1,3 +1,13 @@
+<style>
+  .nav-link {
+  color: white;
+}
+
+.nav-link.active {
+  color: #81c408 !important;
+}
+
+</style>
 <nav class="navbar navbar-expand-lg bg-body-tertiary sticky-top">
   <div class="container-fluid">
     <a class="navbar-brand" href="/product">Fruitables</a>
@@ -13,25 +23,26 @@
       <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="navbarTogglerDemo02">
-      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-        <li class="nav-item">
-          <a class="nav-link active" aria-current="page" href="/product"
-            >Home</a
-          >
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="/product">Shop</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="/product/new">Add</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="/product/contact">Contact Us</a>
-        </li>
-      </ul>
-      <form class="search-bar d-flex" role="search">
+<ul class="navbar-nav me-auto mb-2 mb-lg-0">
+  <li class="nav-item">
+    <a class="nav-link <%= currentRoute === '/product' ? 'active' : '' %>" href="/product">Home</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link <%= currentRoute === '/product/shop' ? 'active' : '' %>" href="/product/shop">Shop</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link <%= currentRoute === '/product/new' ? 'active' : '' %>" href="/product/new">Add</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link <%= currentRoute === '/product/contact' ? 'active' : '' %>" href="/product/contact">Contact Us</a>
+  </li>
+</ul>
+
+
+      <form class="search-bar d-flex" role="search"  action="/product/search">
         <input
           class="form-control me-2"
+           name="q"
           type="search"
           placeholder="Search"
           aria-label="Search"
@@ -41,7 +52,9 @@
         </button>
       </form>
       <div class="icons">
-        <div class="cart"><i class="fa-solid fa-cart-shopping"></i></div>
+        <div class="cart">
+         <a href="/cart" style="text-decoration: none;"> <i class="fa-solid fa-cart-shopping"></i> </a>
+        </div>
 <% if (typeof curUser === 'undefined' || !curUser) { %>
   <div class="cart"><a href="/login"><i class="fa-solid fa-user"></i></a></div>
 <% } else { %>
@@ -52,3 +65,15 @@
     </div>
   </div>
 </nav>
+
+<script>
+  const navLinks = document.querySelectorAll('.nav-link');
+
+  navLinks.forEach(link => {
+    link.addEventListener('click', function() {
+      navLinks.forEach(l => l.classList.remove('active'));
+      this.classList.add('active');
+    });
+  });
+</script>
+

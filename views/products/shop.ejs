@@ -1,0 +1,202 @@
+<% layout("layouts/boilerplate") %> 
+<style>
+  .shop-head {
+    color: #45595b;
+  }
+  .shop-ctg {
+    color: #81c408;
+    font-weight: 500;
+  }
+  .card img {
+  object-fit: cover;
+  height: 200px;
+}
+
+.card .badge {
+  border-radius: 8px;
+  font-size: 0.9rem;
+  padding: 0.4em 0.7em;
+}
+
+.btn-outline-warning {
+  color: #90C418;
+  border-color: #90C418;
+}
+
+.btn-outline-warning:hover {
+  background-color: #90C418;
+  color: white;
+}
+.page-link.custom-page {
+  border: 1px solid orange;
+  color: black;
+  border-radius: 15px;
+  margin: 0 5px;
+  width: 50px;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.page-link.custom-page:hover {
+  background-color: #f0f0f0;
+}
+
+.page-link.custom-page.active-page {
+  background-color: #96d200; /* green active */
+  color: white;
+  border-color: #96d200;
+}
+#price-value {
+  font-weight: bold;
+  color: #45595b;
+  font-size: 1.3rem;
+}
+</style>
+<div class="contact-wrapper">
+    <img src="/img/contact.jpg" alt="Contact Us" />
+<h2>Shop </h2>
+<ol class="list">
+  <li ><a class="same" href="/product">Home /</a></li>
+  <li ><a class="same" href="/product/shop">Shop /</a></li>
+  <li ><a class="diff" href="/product/contact">Contact</a></li>
+</ol>
+</div>
+
+<div class="container my-4">
+  <h1 class="fw-bold mb-4 shop-head">Fresh fruits shop</h1>
+  
+  <div class="row">
+    <!-- Sidebar -->
+    <div class="col-lg-3">
+      <div class="mb-4">
+      <form class=" d-flex" role="search"  action="/product/search"> 
+    <div class="input-group">
+    <input class="form-control me-2"
+           name="q"
+          type="search"
+          placeholder="Search"
+          aria-label="Search">
+    <button class="btn btn-outline-secondary" type="submit" style="background-color: #f0f0f0; color: grey;">
+      <i class="fa-solid fa-magnifying-glass"></i>
+    </button>
+    </div>
+    </form>
+</div>
+
+
+      <h4 class="fw-bold" style="color: #45595b;">Categories</h4>
+      <ul class="list-unstyled" style="cursor: pointer;">
+        <li class="mb-2 shop-ctg" data-category="">
+        <i class="fa-brands fa-apple"></i> All Products
+        </li>
+    <li class="mb-2 shop-ctg" data-category="Fruit">
+     <i class="fa-brands fa-apple"></i> Fruits
+    </li>
+   <li class="mb-2 shop-ctg" data-category="Vegetable">
+    <i class="fa-brands fa-apple"></i> Vegetables
+  </li>
+  <li class="mb-2 shop-ctg" data-category="Bread">
+    <i class="fa-brands fa-apple"></i> Breads
+  </li>
+  <li class="mb-2 shop-ctg" data-category="Meat">
+    <i class="fa-brands fa-apple"></i> Meat
+  </li>
+  </ul>
+  
+
+      <h5 class="fw-bold mt-4">Price</h5>
+      <input type="range" min="0" max="100" value="0" id="price-range">
+      <p id="price-value">0</p>
+
+<div class="position-relative my-3">
+  <img src="/img/banner-fruits.jpg" alt="Fresh Fruits Banner" class="img-fluid rounded">
+  <div class="position-absolute top-50 end-0 translate-middle-y me-3 text-warning fw-bold text-end" style="font-size: 1.8rem;">
+    Fresh <br> Fruits <br> Banner
+  </div>
+</div>
+
+    </div>
+
+    <!-- Products Grid -->
+    <div class="col-lg-9">
+      <div class="d-flex justify-content-between align-items-center mb-3">
+        <div></div>
+        <div>
+          <select class="form-select">
+            <option selected>Default Sorting: Nothing</option>
+            <option value="1">Price Low to High</option>
+            <option value="2">Price High to Low</option>
+          </select>
+        </div>
+      </div>
+      
+        <div class="row g-4" id="product-row">
+          <% ShopItems.forEach(item => { %>
+            <div class="col-md-6 col-lg-4 product-card-container">
+              <a href="/product/<%= item._id %>" class="product-links">
+              <div class="card product-card">
+                <div class="image-container">
+                  <img src="<%= item.image.url %>" class="card-img-top " alt="<%= item.name %>">
+                  <span class="category-badge"><%= item.category %></span>
+                </div>
+                <div class="card-body">
+                  <h5 class="card-title fw-bold"><%= item.name %></h5>
+                  <p class="card-text">Lorem ipsum dolor sit amet consectetur adipisicing elit sed do eiusmod te incididunt</p>
+                  <h6 class="fw-bold price" data-price="<%= item.price %>">&#8377;<%= item.price.toFixed(2) %> / kg</h6>
+                  <form method="post" action="/cart/add/<%= item._id%>"  >
+                  <button class="btn add-to-cart mb-4  ">
+                  <i class="fa-solid fa-lock"></i> Add to cart
+                </button>
+                </form>
+                </div>
+              </div>
+              </a>
+            </div>
+          <% }) %>
+        </div>
+      
+      <div id="no-products-message" style="display: none; text-align: center; margin-top: 20px;">
+  <p class="fw-bold text-danger">No products found for your selected price.</p>
+</div>
+
+
+      <nav aria-label="Page navigation" class=" mb-3 mt-4">
+  <ul class="pagination justify-content-center">
+    <li class="page-item">
+      <a class="page-link custom-page" href="#" aria-label="Previous">
+        <span aria-hidden="true">&laquo;</span>
+      </a>
+    </li>
+    <li class="page-item active">
+      <a class="page-link custom-page active-page" href="#">1</a>
+    </li>
+    <li class="page-item">
+      <a class="page-link custom-page" href="#">2</a>
+    </li>
+    <li class="page-item">
+      <a class="page-link custom-page" href="#">3</a>
+    </li>
+    <li class="page-item">
+      <a class="page-link custom-page" href="#">4</a>
+    </li>
+    <li class="page-item">
+      <a class="page-link custom-page" href="#">5</a>
+    </li>
+    <li class="page-item">
+      <a class="page-link custom-page" href="#">6</a>
+    </li>
+    <li class="page-item">
+      <a class="page-link custom-page" href="#" aria-label="Next">
+        <span aria-hidden="true">&raquo;</span>
+      </a>
+    </li>
+  </ul>
+</nav>
+
+    </div>
+  </div>
+</div>
+
+

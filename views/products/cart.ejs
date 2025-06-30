@@ -1,0 +1,194 @@
+<% layout("layouts/boilerplate") %>
+
+<style>
+.cart-page {
+  display: flex;
+  gap: 20px;
+  padding: 30px;
+  background-color: #f1f3f6;
+  align-items: flex-start;
+}    
+.cart-container {
+  width: 80%;
+  background-color: white;
+  padding: 20px;
+  box-shadow: 0 1px 6px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  margin-left: 20px;
+}
+.price-details {
+background-color: white;
+  padding: 20px;
+  box-shadow: 0 1px 6px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+}
+
+.cart-item {
+  display: flex;
+  border-bottom: 1px solid #eee;
+  padding: 20px 0;
+}
+.product-side {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-right: 20px;
+}
+
+.quantity {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 10px;
+}
+
+
+.product-image img {
+  width: 150px;
+  height: auto;
+  border-radius: 4px;
+  margin-right: 20px;
+}
+
+.product-info {
+  flex-grow: 1;
+}
+
+.product-info h2 {
+  font-size: 17px;
+  margin-bottom: 5px;
+}
+
+.product-info p {
+  margin: 4px 0;
+  font-size: 14px;
+  color: #555;
+}
+
+.price {
+  font-size: 18px !important;
+  font-weight: 600;
+  color: #212121;
+  margin-top: 8px;
+}
+
+.quantity {
+  display: flex;
+  align-items: center;
+  margin-top: 14px;
+}
+
+.qty-btn {
+  padding: 3px 12px;
+  background-color: #f1f1f1;
+  border: 1px solid #ccc;
+  font-size: 16px;
+  cursor: pointer;
+  border-radius: 2px;
+}
+
+.qty-count {
+  margin: 0 12px;
+  font-size: 16px;
+}
+
+.item-actions {
+  display: flex;
+  gap: 20px;
+  margin-top: 14px;
+}
+
+.action-btn {
+  background: none;
+  border: none;
+  color: #212121;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 18px;
+}
+
+.place-order {
+  text-align: right;
+  margin-top: 25px !important;
+  border-radius: 8px;
+  background-color: white;
+  border: 1px solid white;   
+}
+
+.order-btn {
+  padding: 14px 28px;
+  background-color: #fb641b;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  font-size: 15px;
+  font-weight: bold;
+  border-radius: 2px;
+}
+.cart-text{
+    font-size: 17px !important;
+    font-weight: 500 !important;
+    color: black !important;
+}
+.cart-tag {
+    color: green !important;
+    font-size: 17px !important;
+}
+.green {
+  color: green;
+  font-weight: 500;
+}
+</style>
+<div class="cart-page">
+<div class="cart-container">
+  <% cartItems.forEach(item => { %>
+  <div class="cart-item" data-cart-item-id="<%= item._id ? item._id : item.cartItemId %>">
+    <div class="product-side">
+    <div class="product-image">
+      <img src="<%= item.product.image.url %>" alt="Product image">
+    </div>
+    <div class="quantity">
+      <button class="qty-btn minus">−</button>
+      <span class="qty-count"><%= item.quantity %></span>
+      <button class="qty-btn plus">+</button>
+    </div>
+  </div>
+
+       <div class="product-info">
+        <h2 style="font-size: 24px;"><b><%= item.product.name %></b></h2>
+      <p class="cart-text"><%= item.product.description %></p>
+        <p class="cart-tag">Fruitable Assured</p>
+
+        <p class="price" data-price="<%= item.product.price %>"><strong class="strong">Price: </strong> &nbsp;₹<span class="product-total"><%= (item.product.price * item.quantity).toFixed(2) %></span></p>
+
+
+        <div class="item-actions">
+          <form action="/cart/delete/<%= item._id %>" method="POST" class="delete-form">
+         <button type="submit" class="action-btn delete-btn">REMOVE</button>
+          </form>
+
+        </div>
+      </div>
+    </div>
+    
+    
+  <% }) %>
+
+  <div class="place-order">
+    <button class="order-btn">PLACE ORDER</button>
+  </div>
+</div>
+
+
+<div class="price-details">
+    <h3>PRICE DETAILS</h3>
+    <hr />
+    <p class="cart-text total-items">Price (<span id="total-items"><%= cartItems.length %></span> items): ₹<span id="total-price"></span></p>
+    <p class="cart-text">Platform Fee: ₹3</p>
+    <p class="cart-text">Delivery Charges: <s>₹40</s> <span class="green">Free</span></p>
+    <hr />
+    <p class="cart-text"><strong>Total Price: ₹<span id="final-total-price"></span></strong></p>
+
+
+  </div>
+</div>

@@ -213,3 +213,41 @@ color: #45595b;
 .container {
   flex: 1; /* Makes content expand and push footer to bottom */
 }
+.contact-wrapper {
+        position: relative;
+        text-align: center;
+    }
+    .contact-wrapper img {
+        width: 100%;
+        height: 170px;
+    }
+    .contact-wrapper h2 {
+        position: absolute;
+        top: 30%;
+        left: 43%;
+        color: white;
+        font-weight: 700;
+        font-size: 35px;
+        text-align: center;
+    }
+    .contact-wrapper a {
+        text-decoration: none;
+    }
+    .list {
+        position: absolute;
+        list-style-type: none;
+        display: flex;
+        flex-wrap: wrap;
+        left: 38%;
+        bottom: 18%;
+        display: flex;
+        text-align: center;
+    }
+    .same {
+        color: #81c408;
+        font-size: 17px;
+    }
+    .diff {
+        color: #fff;
+        font-size: 17px;
+    }
