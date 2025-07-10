@@ -1,6 +1,7 @@
 const Product = require("../models/product.js");
 const { productSchema } = require("../schema.js"); // Adjust path as needed
 const ExpressError = require("../utils/ExpressError");
+const pluralize = require('pluralize');
 
 module.exports.index = async (req, res) => {
 const allitems = await Product.find({ isFresh: false });
@@ -12,10 +13,65 @@ module.exports.renderForm = (req, res) => {
     res.render("products/new.ejs", { currentRoute: "/product/new" });
 };
 
-module.exports.renderShopItems = async (req,res) => {
-    const ShopItems = await Product.find({});
-    res.render("products/shop.ejs", { ShopItems, currentRoute: "/product/shop" });
-}
+module.exports.renderShopPageSSR = async (req, res) => {
+  const page = parseInt(req.query.page) || 1;
+  const limit = 6;
+  const category = req.query.category;
+
+  let filter = {};
+  if (category) {
+    const singular = pluralize.singular(category);
+    const plural = pluralize.plural(category);
+    filter.category = { $regex: `^(${singular}|${plural})$`, $options: 'i' };
+  }
+
+  const totalProducts = await Product.countDocuments(filter);
+  const totalPages = Math.ceil(totalProducts / limit);
+
+  const products = await Product.find(filter)
+    .skip((page - 1) * limit)
+    .limit(limit);
+
+  res.render("products/shop", {
+    products,
+    currentPage: page,
+    totalPages,
+    category
+  });
+};
+
+
+module.exports.renderShopItems = async (req, res) => {
+  const page = parseInt(req.query.page) || 1;
+  const limit = 6;
+  const category = req.query.category;
+
+  try {
+    let filter = {};
+    if (category) {
+      const singular = pluralize.singular(category);
+      const plural = pluralize.plural(category);
+      filter.category = { $regex: `^(${singular}|${plural})$`, $options: 'i' };
+    }
+
+    const totalProducts = await Product.countDocuments(filter);
+    const totalPages = Math.ceil(totalProducts / limit);
+
+    const products = await Product.find(filter)
+      .skip((page - 1) * limit)
+      .limit(limit);
+
+    res.json({
+      products,
+      currentPage: page,
+      totalPages,
+      category
+    });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Server Error' });
+  }
+};
 
 module.exports.showProduct =  async (req, res) => {
     let { id } = req.params;
@@ -26,7 +82,7 @@ module.exports.showProduct =  async (req, res) => {
         console.log(product.reviews);
     if(!product) {
         req.flash("error","Product you requested for does not exists");
-        res.redirect("/product");
+     return  res.redirect("/product");
     }
     res.render("products/show.ejs", { product });
 };

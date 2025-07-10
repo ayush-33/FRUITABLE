@@ -33,7 +33,7 @@ async function fetchAndRenderCategory(category) {
     } else {
       data.forEach(product => {
         cardsHTML += `
-          <div class="col h-100">
+          <div class="col-md-6 col-lg-4 product-card-container">
             <a href="/product/${product._id}" class="product-links">
               <div class="card product-card mb-4 h-100">
                 <div class="image-container">
@@ -47,7 +47,7 @@ async function fetchAndRenderCategory(category) {
                 <div class="card-body">
                   <h5 class="card-title"><b>${product.name}</b></h5>
                   <p class="card-text text-center description">
-                    ${product.description}
+                    ${product.description || 'No description'}
                   </p>
                   <p class="price">
                     <b> &#8377;${Number(product.price).toFixed(2)} / kg </b>
@@ -64,6 +64,7 @@ async function fetchAndRenderCategory(category) {
     productRow.innerHTML = '<p class="text-center text-danger">Error loading products.</p>';
   }
 }
+
 
 // ✅ On page load, check URL for category and fetch products
 window.addEventListener('DOMContentLoaded', () => {

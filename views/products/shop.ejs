@@ -53,6 +53,13 @@
   color: #45595b;
   font-size: 1.3rem;
 }
+.shop-ctg.active {
+  background-color: #e6f7d9;
+  color: #45595b !important;
+  border-radius: 8px;
+  font-weight: bold;
+  transition: background 0.2s;
+}
 </style>
 <div class="contact-wrapper">
     <img src="/img/contact.jpg" alt="Contact Us" />
@@ -107,7 +114,7 @@
   
 
       <h5 class="fw-bold mt-4">Price</h5>
-      <input type="range" min="0" max="100" value="0" id="price-range">
+      <input type="range" min="0" max="200" value="0" id="price-range">
       <p id="price-value">0</p>
 
 <div class="position-relative my-3">
@@ -125,75 +132,90 @@
         <div></div>
         <div>
           <select class="form-select">
-            <option selected>Default Sorting: Nothing</option>
+            <option value="" selected>Default Sorting: Nothing</option>
             <option value="1">Price Low to High</option>
             <option value="2">Price High to Low</option>
           </select>
         </div>
       </div>
-      
+        
         <div class="row g-4" id="product-row">
-          <% ShopItems.forEach(item => { %>
-            <div class="col-md-6 col-lg-4 product-card-container">
-              <a href="/product/<%= item._id %>" class="product-links">
-              <div class="card product-card">
-                <div class="image-container">
-                  <img src="<%= item.image.url %>" class="card-img-top " alt="<%= item.name %>">
-                  <span class="category-badge"><%= item.category %></span>
-                </div>
-                <div class="card-body">
-                  <h5 class="card-title fw-bold"><%= item.name %></h5>
-                  <p class="card-text">Lorem ipsum dolor sit amet consectetur adipisicing elit sed do eiusmod te incididunt</p>
-                  <h6 class="fw-bold price" data-price="<%= item.price %>">&#8377;<%= item.price.toFixed(2) %> / kg</h6>
-                  <form method="post" action="/cart/add/<%= item._id%>"  >
-                  <button class="btn add-to-cart mb-4  ">
-                  <i class="fa-solid fa-lock"></i> Add to cart
-                </button>
-                </form>
-                </div>
-              </div>
-              </a>
-            </div>
-          <% }) %>
+            <% products.forEach(item => { %>
+        <div class="col-md-6 col-lg-4 product-card-container d-flex ">
+    <a href="/product/<%= item._id %>" class="product-links w-100">
+      <div class="card product-card h-100"> 
+        <div class="image-container">
+          <img src="<%= item.image.url %>" class="card-img-top" alt="<%= item.name %>">
+          <span class="category-badge"><%= item.category %></span>
+        </div>
+        <div class="card-body flex-grow-1 d-flex flex-column">
+          <h5 class="card-title fw-bold"><%= item.name %></h5>
+          <p class="card-text flex-grow-1">
+            <%= item.description.split(' ').slice(0, 15).join(' ') %>
+            <% if (item.description.split(' ').length > 15) { %>...<% } %>
+          </p>
+          <h6 class="fw-bold price" data-price="<%= item.price %>">&#8377;<%= item.price.toFixed(2) %> / kg</h6>
+          <form method="post" action="/cart/add/<%= item._id %>" class="mt-auto">
+            <button class="btn add-to-cart mb-4">
+              <i class="fa-solid fa-lock"></i> Add to cart
+            </button>
+          </form>
+        </div>
+      </div>
+    </a>
+  </div>
+
+
+            <% }) %>
         </div>
       
       <div id="no-products-message" style="display: none; text-align: center; margin-top: 20px;">
   <p class="fw-bold text-danger">No products found for your selected price.</p>
 </div>
 
-
-      <nav aria-label="Page navigation" class=" mb-3 mt-4">
+<nav aria-label="Page navigation" class="mb-3 mt-4">
   <ul class="pagination justify-content-center">
-    <li class="page-item">
-      <a class="page-link custom-page" href="#" aria-label="Previous">
-        <span aria-hidden="true">&laquo;</span>
-      </a>
-    </li>
-    <li class="page-item active">
-      <a class="page-link custom-page active-page" href="#">1</a>
-    </li>
-    <li class="page-item">
-      <a class="page-link custom-page" href="#">2</a>
-    </li>
-    <li class="page-item">
-      <a class="page-link custom-page" href="#">3</a>
-    </li>
-    <li class="page-item">
-      <a class="page-link custom-page" href="#">4</a>
-    </li>
-    <li class="page-item">
-      <a class="page-link custom-page" href="#">5</a>
-    </li>
-    <li class="page-item">
-      <a class="page-link custom-page" href="#">6</a>
-    </li>
-    <li class="page-item">
-      <a class="page-link custom-page" href="#" aria-label="Next">
-        <span aria-hidden="true">&raquo;</span>
-      </a>
-    </li>
+
+    <!-- Previous button -->
+    <% if (currentPage > 1) { %>
+      <li class="page-item">
+        <a class="page-link custom-page" href="?page=<%= currentPage - 1 %><% if (category) { %>&category=<%= category %><% } %>" aria-label="Previous">
+          <span aria-hidden="true">&laquo;</span>
+        </a>
+      </li>
+    <% } else { %>
+      <li class="page-item disabled">
+        <span class="page-link custom-page" aria-label="Previous">
+          <span aria-hidden="true">&laquo;</span>
+        </span>
+      </li>
+    <% } %>
+
+    <!-- Page numbers -->
+    <% for (let i = 1; i <= totalPages; i++) { %>
+      <li class="page-item <%= currentPage === i ? 'active' : '' %>">
+        <a class="page-link custom-page <%= currentPage === i ? 'active-page' : '' %>" href="?page=<%= i %><% if (category) { %>&category=<%= category %><% } %>"><%= i %></a>
+      </li>
+    <% } %>
+
+    <!-- Next button -->
+    <% if (currentPage < totalPages) { %>
+      <li class="page-item">
+        <a class="page-link custom-page" href="?page=<%= currentPage + 1 %><% if (category) { %>&category=<%= category %><% } %>" aria-label="Next">
+          <span aria-hidden="true">&raquo;</span>
+        </a>
+      </li>
+    <% } else { %>
+      <li class="page-item disabled">
+        <span class="page-link custom-page" aria-label="Next">
+          <span aria-hidden="true">&raquo;</span>
+        </span>
+      </li>
+    <% } %>
+
   </ul>
 </nav>
+
 
     </div>
   </div>

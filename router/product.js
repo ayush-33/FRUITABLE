@@ -80,8 +80,10 @@ router.route("/")
 //post route
 .post(isLoggedIn,validateProduct,wrapAsync(productController.createProduct));
 
-//shop 
-router.get("/shop",wrapAsync(productController.renderShopItems));
+//shop
+router.get("/shop",wrapAsync(productController.renderShopPageSSR)); 
+router.get("/shop/api",wrapAsync(productController.renderShopItems));
+
 
 //Router to render form 
 router.get("/new",isLoggedIn,productController.renderForm);
@@ -92,7 +94,7 @@ router.route("/:id")
 //put route
 .put(isLoggedIn,validateProduct,wrapAsync(productController.updateProduct))
 //delete route
-.delete(wrapAsync(isLoggedIn,productController.delete))
+.delete(isLoggedIn, wrapAsync(productController.delete))
 
 //edit form 
 router.get("/:id/edit",isLoggedIn,wrapAsync(productController.renderEditForm))

@@ -31,7 +31,7 @@
       </div>
       <div class="mb-3">
         <label for="description" class="form-label">Enter description</label>
-        <textarea name="product[description]" class="form-control" required>
+        <textarea name="product[description]" class="form-control" minlength="60" maxlength="79" required>
 <%= product.description%></textarea
         >
         <div class="invalid-feedback">Please enter short description</div>

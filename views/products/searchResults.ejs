@@ -1,5 +1,16 @@
 <% layout("layouts/boilerplate") %>
-
+<style>
+  .text {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: #71c408;
+  }
+  .head {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #71c408;
+  }
+</style>
 <div class="container mt-4">
   <h3>Search Results for "<%= query %>"</h3>
 
@@ -16,9 +27,9 @@
           <% } else { %>
             <img src="/images/default-product.png" class="card-img-top mb-3" alt="No image available" style="max-height: 200px; object-fit: contain;">
           <% } %>
-          <h5><%= product.name %></h5>
-          <p><strong>Category:</strong> <%= product.category %></p>
-          <p><strong>Price:</strong> ₹<%= product.price %></p>
+          <h5 class="head"><%= product.name %></h5>
+          <p class="text"><strong>Category:</strong> <%= product.category %></p>
+          <p class="text"><strong>Price:</strong> ₹<%= product.price %></p>
         </div>
       </a>
     </div>
