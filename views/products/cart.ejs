@@ -163,9 +163,9 @@ background-color: white;
 
 
         <div class="item-actions">
-          <form action="/cart/delete/<%= item._id %>" method="POST" class="delete-form">
-         <button type="submit" class="action-btn delete-btn">REMOVE</button>
-          </form>
+          <form action="/cart/delete/<%= item._id ? item._id : item.cartItemId %>" method="POST" class="delete-form">
+  <button type="submit" class="action-btn delete-btn">REMOVE</button>
+</form>
 
         </div>
       </div>
@@ -175,8 +175,10 @@ background-color: white;
   <% }) %>
 
   <div class="place-order">
-    <button class="order-btn">PLACE ORDER</button>
-  </div>
+  <form action="/cart/checkout" method="GET">
+    <button type="submit" class="order-btn">PLACE ORDER</button>
+  </form>
+</div>
 </div>
 
 
@@ -188,7 +190,5 @@ background-color: white;
     <p class="cart-text">Delivery Charges: <s>₹40</s> <span class="green">Free</span></p>
     <hr />
     <p class="cart-text"><strong>Total Price: ₹<span id="final-total-price"></span></strong></p>
-
-
   </div>
 </div>

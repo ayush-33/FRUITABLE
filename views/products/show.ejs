@@ -124,11 +124,13 @@
         <p class="card-text">
           <b>&#8377;<%= product.price.toFixed(2) %> / kg</b>
         </p>
-        <form method="post" action="/cart/add/<%= product._id%>"  >
-        <button class="btn add-to-cart mb-4  ">
-          <i class="fa-solid fa-lock"></i> Add to cart
-        </button>
-        </form>
+        <form method="post" action="/cart/add/<%= product._id %>">
+  <button class="btn add-to-cart mb-4">
+    <i class="fa-solid fa-lock"></i> Add to cart
+  </button>
+</form>
+
+
         <!-- <div class="quantity-controls d-none ">
          <button class="decrease">-</button>
          <span class="quantity">1</span>

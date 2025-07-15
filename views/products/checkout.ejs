@@ -1,0 +1,134 @@
+<% layout("layouts/boilerplate") %>
+
+<style>
+.order-summary-page {
+  display: flex;
+  gap: 20px;
+  padding: 30px;
+  background-color: #f1f3f6;
+  align-items: flex-start;
+}
+.address-section {
+  background-color: white;
+  padding: 20px;
+  box-shadow: 0 1px 6px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  width: 60%;
+}
+.summary-section {
+  background-color: white;
+  padding: 15px;
+  box-shadow: 0 1px 6px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  width: 35%; /* Reduced width */
+  max-height: 400px; /* Adjust height as per your design */
+  overflow-y: auto;  /* Scroll if too long */
+}
+.address-section h3, .summary-section h3 {
+  margin-bottom: 20px;
+}
+.address-details label {
+  display: block;
+  margin-top: 10px;
+  font-weight: bold;
+}
+.address-details input {
+  width: 100%;
+  padding: 8px;
+  margin-top: 5px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+.cart-item-summary {
+  display: flex;
+  justify-content: space-between;
+  border-bottom: 1px solid #eee;
+  padding: 10px 0;
+}
+.cart-item-summary p {
+  font-size: 16px;
+  font-weight: 500;
+}
+.cart-text {
+  font-size: 17px; /* Increased font size */
+  font-weight: 600; /* Increased font weight */
+  margin: 5px 0;
+}
+.green {
+  color: green;
+  font-weight: 600;
+}
+.total-amount {
+  text-align: right;
+  font-size: 20px; /* Increased font size */
+  font-weight: bold;
+  margin-top: 20px;
+}
+.confirm-btn {
+  padding: 14px 28px;
+  background-color: #fb641b;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  font-size: 15px;
+  font-weight: bold;
+  border-radius: 2px;
+  margin-top: 20px;
+  float: right;
+}
+</style>
+
+<div class="order-summary-page">
+  <form action="/order/prepare-payment" method="POST" style="display: flex; gap: 20px; width: 100%;">
+    <div class="address-section">
+      <h3>Delivery Address</h3>
+      <div class="address-details">
+        <label>Full Name</label>
+        <input type="text" name="name" required placeholder="Your full name">
+
+        <label>Phone</label>
+        <input type="text" name="phone" required placeholder="10 digit phone">
+
+        <label>Address Line</label>
+        <input type="text" name="line1" required placeholder="House no, Street">
+
+        <label>City</label>
+        <input type="text" name="city" required placeholder="City">
+
+        <label>State</label>
+        <input type="text" name="state" required placeholder="State">
+
+        <label>Pincode</label>
+        <input type="text" name="pincode" required placeholder="Pincode">
+      </div>
+    </div>
+
+    <div class="summary-section">
+      <h3>Order Summary</h3>
+
+      <% 
+        let itemsTotal = cartItems.reduce((total, item) => total + (item.product.price * item.quantity), 0);
+        let platformFee = 3;
+        let finalTotal = itemsTotal + platformFee;
+      %>
+
+      <p class="cart-text total-items">
+        Price (<%= cartItems.length %> items): ₹<%= itemsTotal.toFixed(2) %>
+      </p>
+
+      <p class="cart-text">Platform Fee: ₹<%= platformFee.toFixed(2) %></p>
+
+      <p class="cart-text">
+        Delivery Charges: <s>₹40</s> <span class="green">Free</span>
+      </p>
+
+      <hr />
+
+      <p class="cart-text">
+        <strong>Total Price: ₹<%= finalTotal.toFixed(2) %></strong>
+      </p>
+
+      <button type="submit" class="confirm-btn">CONFIRM ORDER</button>
+    </div>
+  </form>
+</div>

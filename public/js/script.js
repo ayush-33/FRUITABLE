@@ -1,33 +1,30 @@
 // Example starter JavaScript for disabling form submissions if there are invalid fields
 (() => {
-    'use strict'
-  
-    // Fetch all the forms we want to apply custom Bootstrap validation styles to
-    const forms = document.querySelectorAll('.needs-validation')
-  
-    // Loop over them and prevent submission
-    Array.from(forms).forEach(form => {
-      form.addEventListener('submit', event => {
-        if (!form.checkValidity()) {
-          event.preventDefault()
-          event.stopPropagation()
-        }
-  
-        form.classList.add('was-validated')
-      }, false)
-    })
-  })()
+  'use strict';
+
+  const forms = document.querySelectorAll('.needs-validation');
+  Array.from(forms).forEach(form => {
+    form.addEventListener('submit', event => {
+      if (!form.checkValidity()) {
+        event.preventDefault();
+        event.stopPropagation();
+      }
+      form.classList.add('was-validated');
+    }, false);
+  });
+})();
 
 // Script to handle category filtering and product display
 const productRow = document.getElementById('product-row');
-const originalHTML = productRow.innerHTML;
 
-// ✅ Function to fetch and render products for a category
+// Function to fetch and render products for a category
 async function fetchAndRenderCategory(category) {
   let cardsHTML = '';
   try {
-    const res = await fetch(`/product/category?category=${category}`);
+    const url = category ? `/product/category?category=${category}` : `/product/category`;
+    const res = await fetch(url);
     const data = await res.json();
+
     if (data.length === 0) {
       cardsHTML = '<p class="text-center">No products found in this category.</p>';
     } else {
@@ -59,51 +56,54 @@ async function fetchAndRenderCategory(category) {
         `;
       });
     }
+
     productRow.innerHTML = cardsHTML;
   } catch (err) {
+    console.error("Fetch error:", err);
     productRow.innerHTML = '<p class="text-center text-danger">Error loading products.</p>';
   }
 }
 
+// Helper to update active class on category buttons
+function updateActiveCategory(category) {
+  document.querySelectorAll('.category-btn').forEach(btn => {
+    if ((category && btn.dataset.category === category) || (!category && !btn.dataset.category)) {
+      btn.classList.add('active');
+    } else {
+      btn.classList.remove('active');
+    }
+  });
+}
 
-// ✅ On page load, check URL for category and fetch products
+// On page load, always fetch products dynamically
 window.addEventListener('DOMContentLoaded', () => {
   const urlParams = new URLSearchParams(window.location.search);
   const category = urlParams.get('category');
 
-  if (category) {
-    fetchAndRenderCategory(category);
+  updateActiveCategory(category);
 
-    // Set active class on matching button
-    document.querySelectorAll('.category-btn').forEach(btn => {
-      if (btn.dataset.category === category) {
-        btn.classList.add('active');
-      } else {
-        btn.classList.remove('active');
-      }
-    });
+  if (category) {
+    fetchAndRenderCategory(category || '');
   }
 });
 
-// ✅ Click handler to fetch products and update URL
+// Click handler to fetch products and update URL dynamically
 document.querySelectorAll('.category-btn').forEach(button => {
-  button.addEventListener('click', async (e) => {
+  button.addEventListener('click', async () => {
     const category = button.dataset.category;
 
-    // Update URL without reload
     const newUrl = category ? `/product?category=${category}` : '/product';
     window.history.pushState({ category }, '', newUrl);
 
-    // Update active class styles
-    document.querySelectorAll('.category-btn').forEach(btn => btn.classList.remove('active'));
-    button.classList.add('active');
-
-    if (category) {
-      fetchAndRenderCategory(category);
-    } else {
-      productRow.innerHTML = originalHTML;
-    }
+    updateActiveCategory(category);
+    fetchAndRenderCategory(category || '');
   });
 });
 
-
+// Handle browser navigation (back/forward)
+window.addEventListener('popstate', () => {
+  const urlParams = new URLSearchParams(window.location.search);
+  const category = urlParams.get('category');
+  updateActiveCategory(category);
+  fetchAndRenderCategory(category || '');
+});

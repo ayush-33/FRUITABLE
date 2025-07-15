@@ -4,10 +4,24 @@ const ExpressError = require("../utils/ExpressError");
 const pluralize = require('pluralize');
 
 module.exports.index = async (req, res) => {
-const allitems = await Product.find({ isFresh: false });
-const freshItems = await Product.find({ isFresh: true });
-    res.render("products/index.ejs", { allitems ,freshItems, currentRoute: "/product" });
+  try {
+    const category = req.query.category;
+    let filter = { isFresh: false }; // base filter
+
+    if (category) {
+      filter.category = { $regex: `^${category}$`, $options: 'i' }; // add category filter case-insensitively
+    }
+
+    const allitems = await Product.find(filter);
+    const freshItems = await Product.find({ isFresh: true }); // unchanged
+
+    res.render("products/index.ejs", { allitems, freshItems, currentRoute: "/product" });
+  } catch (err) {
+    console.error("Error in /product controller:", err);
+    res.status(500).send("Internal Server Error");
+  }
 };
+
 
 module.exports.renderForm = (req, res) => {
     res.render("products/new.ejs", { currentRoute: "/product/new" });

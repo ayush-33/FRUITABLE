@@ -57,22 +57,24 @@ router.get("/search", async (req, res) => {
   }
 });
 
+router.get("/category", async (req, res) => {
+  try {
+    const category = req.query.category;
+    let filter = { isFresh: false }; // same filter for consistency
 
-router.get("/category", async (req,res) => {
-try {
-  const category = req.query.category;
-  let filter = {};
-   if (category) {
-      filter.category = { $regex: `^${category}$`, $options: 'i' }; // case-insensitive match
+    if (category) {
+      filter.category = { $regex: `^${category}$`, $options: 'i' };
     }
-  const products = await Product.find(filter);
-  res.json(products);
-}catch(err) {
-  console.error("Error in Product/category", err);
-  res.status(500).json({ error: "Internal Server Error" });
-  req.flash("error", "Something went wrong while fetching products.");
-}
+
+    const products = await Product.find(filter);
+    res.json(products);
+  } catch (err) {
+    console.error("Error in /product/category API:", err);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
 });
+
+
 
 router.route("/")
 //index route

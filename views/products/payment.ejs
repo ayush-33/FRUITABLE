@@ -1,0 +1,100 @@
+<% layout("layouts/boilerplate") %>
+
+<style>
+.payment-page {
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+  padding: 40px;
+  background-color: #f1f3f6;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.payment-section {
+  background-color: white;
+  padding: 25px 30px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  border-radius: 8px;
+}
+
+.payment-section h3 {
+  margin-bottom: 20px;
+  border-bottom: 2px solid #ddd;
+  padding-bottom: 10px;
+  font-size: 20px;
+  color: #333;
+}
+
+.payment-section p {
+  font-size: 16px;
+  color: #444;
+  margin-bottom: 5px;
+  font-weight: 500;
+}
+
+.order-item {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 12px;
+  font-size: 17px;
+  font-weight: 600;
+  color: #333;
+}
+
+.total-amount {
+  text-align: right;
+  font-size: 20px;
+  font-weight: bold;
+  margin-top: 20px;
+  color: #000;
+}
+
+.place-order-btn {
+  padding: 14px 28px;
+  background-color: #fb641b;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: bold;
+  border-radius: 4px;
+  margin-top: 25px;
+  float: right;
+  transition: background-color 0.3s ease;
+}
+
+.place-order-btn:hover {
+  background-color: #d9541b;
+}
+</style>
+
+<div class="payment-page">
+  <h2 style="font-size: 26px; font-weight: bold; color: #333;">Payment</h2>
+
+  <!-- Delivery Address Box -->
+  <div class="payment-section">
+    <h3>Delivery Address</h3>
+    <p><%= tempOrder.name %></p>
+    <p><%= tempOrder.line1 %>, <%= tempOrder.city %>, <%= tempOrder.state %> - <%= tempOrder.pincode %></p>
+    <p>Phone: <%= tempOrder.phone %></p>
+  </div>
+
+  <!-- Order Summary Box -->
+  <div class="payment-section">
+    <h3>Order Summary</h3>
+    <% tempOrder.items.forEach(item => { %>
+      <div class="order-item">
+        <span><%= item.quantity %> x <%= item.product.name %></span>
+        <span>₹<%= (item.price * item.quantity).toFixed(2) %></span>
+      </div>
+    <% }) %>
+
+    <div class="total-amount">
+      Total Amount: ₹<%= tempOrder.totalAmount %>
+    </div>
+
+    <form action="/order/confirm" method="POST">
+      <button type="submit" class="place-order-btn">PAY & PLACE ORDER</button>
+    </form>
+  </div>
+</div>

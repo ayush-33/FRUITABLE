@@ -4,14 +4,25 @@ const ExpressError = require("./utils/ExpressError.js");
 const {productSchema ,reviewSchema } = require("./schema.js");
 const Review = require("./models/review.js");
 
-module.exports.isLoggedIn = (req,res,next) => {
-    if(!req.isAuthenticated()){
-      req.session.redirectUrl = req.originalUrl;
-      req.flash("error", "you must be logged In to access Products");
-      return res.redirect("/login");
+
+module.exports.isLoggedIn = (req, res, next) => {
+  if (!req.isAuthenticated()) {
+    if (req.method === "GET") {
+      res.cookie("returnTo", req.originalUrl, { httpOnly: true });
+    //   console.log(" [ReturnTo Cookie - GET] Stored:", req.originalUrl);
+    } else if (req.method === "POST") {
+      const returnTo = req.body.returnTo || req.get("Referer") || "/product";
+      res.cookie("returnTo", returnTo, { httpOnly: true });
+    //   console.log("🍪 [ReturnTo Cookie - POST] Stored:", returnTo);
     }
-    next();
-}
+    req.flash("error", "You must be logged in first");
+    return res.redirect("/login");
+  }
+  next();
+};
+
+
+
 
 //middleware to check product schema
 module.exports.validateProduct = (req,res,next) => {

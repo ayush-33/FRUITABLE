@@ -52,8 +52,23 @@
         </button>
       </form>
       <div class="icons">
-        <div class="cart">
-         <a href="/cart" style="text-decoration: none;"> <i class="fa-solid fa-cart-shopping"></i> </a>
+        <div class="cart" style="position: relative;">
+          <a href="/cart" style="text-decoration: none; position: relative;">
+            <i class="fa-solid fa-cart-shopping"></i>
+            <% if (cartCount && cartCount > 0) { %>
+              <span style="
+                position: absolute;
+                top: -14px;   /* Move badge higher */
+                right: -10px;
+                background: orange;
+                color: white;
+                border-radius: 50%;
+                padding: 2px 7px;
+                font-size: 13px;
+                font-weight: bold;
+              "><%= cartCount %></span>
+            <% } %>
+          </a>
         </div>
 <% if (typeof curUser === 'undefined' || !curUser) { %>
   <div class="cart"><a href="/login"><i class="fa-solid fa-user"></i></a></div>

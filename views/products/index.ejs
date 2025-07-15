@@ -556,9 +556,9 @@
 <!-- Cards -->
 <div class="outer-card" id="static-products">
   <div class="container" >
-  <div class="row row-cols-lg-4 row-cols-md-2 row-cols-sm-1 mt-3" id="product-row">
+  <div class="row mt-3" id="product-row">
   <% allitems.forEach((product) => { %>
-  <div class="col h-100">
+  <div class="col-md-6 col-lg-4 product-card-container">
     <a href="/product/<%= product._id %>" class="product-links">
       <div class="card product-card mb-4 h-100">
         <div class="image-container">

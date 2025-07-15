@@ -15,10 +15,15 @@ const productRouter = require('./router/product');
 const client = redis.createClient();
 client.on('error', (err) => console.error('Redis Client Error', err));
 
+// Start server only after Redis is connected
 (async () => {
   await client.connect();
   console.log('✅ Redis connected!');
-  app.locals.redisClient = client; 
+  app.locals.redisClient = client;
+
+  app.listen(8080, () => {
+    console.log("Listening to port");
+  });
 })();
 
 const session = require("express-session");
@@ -34,6 +39,8 @@ app.use(cookieParser());
 const userRouter = require("./router/user.js");
 const reviewsRouter = require("./router/review.js");
 const cartRouter = require("./router/cart.js");
+const Cart = require("./models/cart.js");
+const orderRouter = require("./router/order.js");
 
 main()
   .then(() => {
@@ -54,6 +61,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(methodOverride("_method"));
 app.use(express.static(path.join(__dirname, "/public")));
 app.use(express.static("public"));
+app.use(express.json()); 
 
 const store = MongoStore.create({
     mongoUrl : "mongodb://127.0.0.1:27017/Fruitable" ,
@@ -94,26 +102,46 @@ app.use((req, res, next) => {
     res.locals.success = req.flash("success");
     res.locals.error = req.flash("error");
     res.locals.curUser = req.user;
+    res.locals.req = req; // Pass req to views for dynamic content
     next();
 });
+
 // Middleware to set current route for active link highlighting
 app.use((req, res, next) => {
   res.locals.currentRoute = req.path;
   next();
 });
 
+// Example middleware (add before your routes)
+app.use(async (req, res, next) => {
+  try {
+    if (req.user) {
+      res.locals.cartCount = await Cart.countDocuments({ user: req.user._id, quantity: { $gt: 0 } });
+    } else {
+      res.locals.cartCount = 0;
+    }
+    next();
+  } catch (err) {
+    res.locals.cartCount = 0;
+    next();
+  }
+});
+
+// 🔑 Cookie-based returnTo middleware
+app.use((req, res, next) => {
+  if (!req.isAuthenticated() && req.method === "GET" && !req.path.startsWith("/login") && !req.path.startsWith("/signup")) {
+    res.cookie("returnTo", req.originalUrl, { httpOnly: true });
+    console.log("🍪 [ReturnTo Cookie] Stored:", req.originalUrl);
+  }
+  next();
+});
+
 //Router
 app.use("/product",productRouter);
 app.use("/product/:id/reviews", reviewsRouter);
-app.use(express.json()); 
 app.use("/cart",cartRouter);
 app.use("/",userRouter);
-
-
-app.all("*",(req,res,next)=> {
-  next(new ExpressError(404, "Page not Found"));
-})
-
+app.use("/order",orderRouter);
 
 app.all("*", (req,res,next) => {
   next(new ExpressError(404,"Page not Found"));
@@ -123,8 +151,4 @@ app.all("*", (req,res,next) => {
 app.use((err,req,res,next) => {
   let {statusCode = 500,message = "Some Error Occured"} = err;
   res.status(statusCode).render("error.ejs", {err});
-});
-
-app.listen(8080, () => {
-  console.log("Listening to port");
 });
