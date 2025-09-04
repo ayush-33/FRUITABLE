@@ -3,24 +3,24 @@ const { productSchema } = require("../schema.js"); // Adjust path as needed
 const ExpressError = require("../utils/ExpressError");
 const pluralize = require('pluralize');
 
-module.exports.index = async (req, res) => {
-  try {
-    const category = req.query.category;
-    let filter = { isFresh: false }; // base filter
+// module.exports.index = async (req, res) => {
+//   try {
+//     const category = req.query.category;
+//     let filter = { isFresh: false }; // base filter
 
-    if (category) {
-      filter.category = { $regex: `^${category}$`, $options: 'i' }; // add category filter case-insensitively
-    }
+//     if (category) {
+//       filter.category = { $regex: `^${category}$`, $options: 'i' }; // add category filter case-insensitively
+//     }
 
-    const allitems = await Product.find(filter);
-    const freshItems = await Product.find({ isFresh: true }); // unchanged
+//     const allitems = await Product.find(filter);
+//     const freshItems = await Product.find({ isFresh: true }); // unchanged
 
-    res.render("products/index.ejs", { allitems, freshItems, currentRoute: "/product" });
-  } catch (err) {
-    console.error("Error in /product controller:", err);
-    res.status(500).send("Internal Server Error");
-  }
-};
+//     res.render("products/index.ejs", { allitems, freshItems, currentRoute: "/product" });
+//   } catch (err) {
+//     console.error("Error in /product controller:", err);
+//     res.status(500).send("Internal Server Error");
+//   }
+// };
 
 
 module.exports.renderForm = (req, res) => {
@@ -115,7 +115,7 @@ module.exports.createProduct =  async (req, res, next) => {
         newProduct.owner = req.user._id;
         await newProduct.save();
         req.flash("success", "New Product Created!");
-        res.redirect("/product");
+        res.redirect("/");
     } catch (err) {
         next(err);
     }
@@ -126,7 +126,7 @@ module.exports.renderEditForm =  async (req, res) => {
   const product = await Product.findById(id);
   if (!product) {
         req.flash("error","Product you requested for does not exists");
-        res.redirect("/product");
+        res.redirect("/");
   }
   res.render("products/edit.ejs", { product });
 };
@@ -143,6 +143,6 @@ module.exports.delete = async (req, res) => {
     let { id } = req.params;
     let product = await Product.findByIdAndDelete(id);
       req.flash("success", "Product Deleted!");
-    res.redirect("/product");
+    res.redirect("/");
   };
 

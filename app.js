@@ -10,6 +10,7 @@ const ExpressError = require("./utils/ExpressError.js");
 
 //Redis
 const redis = require('redis');
+const homeRouter = require('./router/home');
 const productRouter = require('./router/product');
 
 const client = redis.createClient();
@@ -21,7 +22,7 @@ client.on('error', (err) => console.error('Redis Client Error', err));
   console.log('✅ Redis connected!');
   app.locals.redisClient = client;
 
-  app.listen(8080, () => {
+  app.listen(3000, () => {
     console.log("Listening to port");
   });
 })();
@@ -131,12 +132,13 @@ app.use(async (req, res, next) => {
 app.use((req, res, next) => {
   if (!req.isAuthenticated() && req.method === "GET" && !req.path.startsWith("/login") && !req.path.startsWith("/signup")) {
     res.cookie("returnTo", req.originalUrl, { httpOnly: true });
-    console.log("🍪 [ReturnTo Cookie] Stored:", req.originalUrl);
+    // console.log("🍪 [ReturnTo Cookie] Stored:", req.originalUrl);
   }
   next();
 });
 
 //Router
+app.use("/", homeRouter);
 app.use("/product",productRouter);
 app.use("/product/:id/reviews", reviewsRouter);
 app.use("/cart",cartRouter);

@@ -11,7 +11,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  height: 450px;
+  /* height: 450px; */
   overflow: visible;
   width: 100%;
   margin: 0 !important;
@@ -97,7 +97,7 @@
   max-width: 400px;
   border: 1px solid transparent;
   z-index: 1;
-  margin: 2rem 4rem 0 0 ;
+  margin: 0 4rem 0 0 ;
 }
 .carousel {
   width: 100%;
@@ -352,8 +352,7 @@
   position: relative;
 }
 .sec-img {
-  width: 600px;
-  height: 540px;
+  width: 400px;
 }
 .price-badge {
   position: absolute;
@@ -453,10 +452,50 @@
   padding: 50px 50px;
   border-radius: 15px;
 }
+
+@media (max-width: 480px) {
+  .section {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  overflow: visible;
+  width: 100%;
+  margin: 0 !important;
+  padding: 0 !important;
+  flex-grow: 1;
+}.left-section {
+  z-index: 1;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  
+}
+.tagline {
+  color: orange;
+  font-size: 1rem;
+  margin-top: 1rem;
+  font-weight: 400;
+  margin-left: 0;
+}.section-search{
+  display: flex;
+  align-items: center;
+  margin-top: 1rem;
+  margin-left: 0;
+  margin-bottom: 0.5rem;
+  max-width: 450px;
+  background: white;
+  border-radius: 50px;
+  border: 2px solid orange;
+  overflow: hidden;
+}
+}
+
 </style>
 <!-- Section  -->
 <section class="section">
-<div class="left-section">
+
+  <div class="left-section">
   <p class="tagline">100% Organic Foods</p>
   <h1>Organic Veggies & Fruits Foods</h1>
   <div >
@@ -466,6 +505,7 @@
 </form>
   </div>
 </div>
+
 
   <div class="right-section">
     <div id="carouselExample" class="carousel slide"  data-bs-ride="carousel">
@@ -490,7 +530,9 @@
         <span class="visually-hidden">Next</span>
       </button>
     </div>
-  </div>
+</div>
+
+
 </section>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
@@ -542,57 +584,74 @@
 </div>
 
 <!-- Category Batch -->
-<div class="section-header">
-  <h1 class="section-title" >Our Organic <br>Products</h1>
-   <div class="category-buttons">
-  <button class="category-btn active" data-category="">All Products</button>
-  <button class="category-btn" data-category="Vegetable">Vegetable</button>
-  <button class="category-btn" data-category="Fruit">Fruit</button>
-  <button class="category-btn" data-category="Bread">Bread</button>
-  <button class="category-btn" data-category="Meat">Meat</button>
+ <div class="section-header"> <h1 class="section-title" >Our Organic <br>Products</h1>
+<div class="category-buttons">
+  <a class="anchor" href="/">
+    <button class="category-btn <%= !category ? 'active' : '' %>">All Products</button>
+  </a>
+  <a class="anchor" href="/?category=Vegetable">
+    <button class="category-btn <%= category === 'Vegetable' ? 'active' : '' %>">Vegetable</button>
+  </a>
+  <a class="anchor" href="/?category=Fruit">
+    <button class="category-btn <%= category === 'Fruit' ? 'active' : '' %>">Fruit</button>
+  </a>
+  <a class="anchor" href="/?category=Bread">
+    <button class="category-btn <%= category === 'Bread' ? 'active' : '' %>">Bread</button>
+  </a>
+  <a class="anchor" href="/?category=Meat">
+    <button class="category-btn <%= category === 'Meat' ? 'active' : '' %>">Meat</button>
+  </a>
 </div>
-</div>
+ </div>
+
+
 
 <!-- Cards -->
 <div class="outer-card" id="static-products">
-  <div class="container" >
-  <div class="row mt-3" id="product-row">
-  <% allitems.forEach((product) => { %>
-  <div class="col-md-6 col-lg-4 product-card-container">
-    <a href="/product/<%= product._id %>" class="product-links">
-      <div class="card product-card mb-4 h-100">
-        <div class="image-container">
-          <img
-            src="<%= product.image.url %>"
-            alt="Product Image"
-            class="card-img-top"
-          />
-          <span class="category-badge"><%= product.category %></span>
+  <div class="container">
+    <div class="row mt-3"  >
+
+      <% if (allitems && allitems.length > 0) { %>
+        <% allitems.forEach(product => { %>
+          <div class="col-md-6 col-lg-4 product-card-container">
+            <a href="/product/<%= product._id %>" class="product-links">
+              <div class="card product-card mb-4 h-100">
+                <div class="image-container">
+                  <img
+                    src="<%= product.image && product.image.url ? product.image.url : '/img/default.jpg' %>"
+                    alt="Product Image"
+                    class="card-img-top"
+                  />
+                  <span class="category-badge"><%= product.category || 'Uncategorized' %></span>
+                </div>
+                <div class="card-body">
+                  <h5 class="card-title"><b><%= product.name || 'No name' %></b></h5>
+                  <p class="card-text text-center description">
+                    <%= product.description || 'No description' %>
+                  </p>
+                  <p class="price">
+                    <b> &#8377;<%= product.price ? Number(product.price).toFixed(2) : '0.00' %> / kg </b>
+                  </p>
+                </div>
+              </div>
+            </a>
+          </div>
+        <% }) %>
+      <% } else { %>
+        <div class="col-12">
+          <p class="text-center">No products found</p>
         </div>
-        <div class="card-body">
-          <h5 class="card-title"><b><%= product.name %></b></h5>
-          <p class="card-text text-center description">
-            <%= product.description %>
-          </p>
-          <p class="price">
-            <b> &#8377;<%= product.price.toFixed(2) %> / kg </b>
-          </p>
-          <!-- <button class="btn add-to-cart">
-            <i class="fa-solid fa-lock"></i> Add to cart
-          </button> -->
-        </div>
-      </div>
-    </a>
+      <% } %>
+
+    </div>
   </div>
-  <% }); %>
 </div>
-</div>
-</div>
+
 
 <!-- After Section Offer -->
 <div class="offer-section container">
   <div class="row ">
-   <div class="outer-container"> 
+   <!-- <div class="outer-container">  -->
     <div class="col-md-4 mb-4">
       <div class="offer-card apple">
        <img src="/img/featur_1.jpg" class="offer-img" alt="apple">
@@ -622,7 +681,8 @@
         <p class="offer-text">Discount 30%</p>
        </div>
       </div>
-    </div></div>
+    </div>
+  <!-- </div> -->
   </div>
 </div>
 

@@ -8,87 +8,65 @@
 }
 
 </style>
-<nav class="navbar navbar-expand-lg bg-body-tertiary sticky-top">
+<nav class="navbar navbar-expand-lg sticky-top">
   <div class="container-fluid">
-    <a class="navbar-brand" href="/product">Fruitables</a>
-    <button
-      class="navbar-toggler"
-      type="button"
-      data-bs-toggle="collapse"
-      data-bs-target="#navbarTogglerDemo02"
-      aria-controls="navbarTogglerDemo02"
-      aria-expanded="false"
-      aria-label="Toggle navigation"
-    >
+    <a class="navbar-brand" href="/">Fruitables</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent"
+      aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
-    <div class="collapse navbar-collapse" id="navbarTogglerDemo02">
-<ul class="navbar-nav me-auto mb-2 mb-lg-0">
-  <li class="nav-item">
-    <a class="nav-link <%= currentRoute === '/product' ? 'active' : '' %>" href="/product">Home</a>
-  </li>
-  <li class="nav-item">
-    <a class="nav-link <%= currentRoute === '/product/shop' ? 'active' : '' %>" href="/product/shop">Shop</a>
-  </li>
-  <li class="nav-item">
-    <a class="nav-link <%= currentRoute === '/product/new' ? 'active' : '' %>" href="/product/new">Add</a>
-  </li>
-  <li class="nav-item">
-    <a class="nav-link <%= currentRoute === '/product/contact' ? 'active' : '' %>" href="/product/contact">Contact Us</a>
-  </li>
-</ul>
 
+    <div class="collapse navbar-collapse" id="navbarContent">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <li class="nav-item">
+          <a class="nav-link <%= currentRoute === '/product' ? 'active' : '' %>" href="/">Home</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link <%= currentRoute === '/product/shop' ? 'active' : '' %>" href="/product/shop">Shop</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link <%= currentRoute === '/product/new' ? 'active' : '' %>" href="/product/new">Add</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link <%= currentRoute === '/product/contact' ? 'active' : '' %>" href="/product/contact">Contact Us</a>
+        </li>
+      </ul>
 
-      <form class="search-bar d-flex" role="search"  action="/product/search">
-        <input
-          class="form-control me-2"
-           name="q"
-          type="search"
-          placeholder="Search"
-          aria-label="Search"
-        />
+      <form class="d-flex search-bar my-2 my-lg-0" role="search" action="/product/search">
+        <input class="form-control me-2" name="q" type="search" placeholder="Search" aria-label="Search">
         <button class="btn btn-outline-success" type="submit">
           <i class="search fa-solid fa-magnifying-glass"></i>
         </button>
       </form>
-      <div class="icons">
-        <div class="cart" style="position: relative;">
+
+      <div class="icons ms-3">
+        <div class="cart position-relative">
           <a href="/cart" style="text-decoration: none; position: relative;">
             <i class="fa-solid fa-cart-shopping"></i>
             <% if (cartCount && cartCount > 0) { %>
-              <span style="
-                position: absolute;
-                top: -14px;   /* Move badge higher */
-                right: -10px;
-                background: orange;
-                color: white;
-                border-radius: 50%;
-                padding: 2px 7px;
-                font-size: 13px;
-                font-weight: bold;
-              "><%= cartCount %></span>
+              <span><%= cartCount %></span>
             <% } %>
           </a>
         </div>
-<% if (typeof curUser === 'undefined' || !curUser) { %>
-  <div class="cart"><a href="/login"><i class="fa-solid fa-user"></i></a></div>
-<% } else { %>
-  <div class="cart"><a href="/logout"><i class="fa-solid fa-arrow-right-from-bracket"></i></a></div>
-<% } %>
 
+        <% if (!curUser) { %>
+          <div class="cart"><a href="/login"><i class="fa-solid fa-user"></i></a></div>
+        <% } else { %>
+          <div class="cart"><a href="/logout"><i class="fa-solid fa-arrow-right-from-bracket"></i></a></div>
+        <% } %>
       </div>
     </div>
   </div>
 </nav>
+<!-- <script>
+const navLinks = document.querySelectorAll('.nav-link');
 
-<script>
-  const navLinks = document.querySelectorAll('.nav-link');
-
-  navLinks.forEach(link => {
-    link.addEventListener('click', function() {
-      navLinks.forEach(l => l.classList.remove('active'));
-      this.classList.add('active');
-    });
+navLinks.forEach(link => {
+  link.addEventListener('click', function() {
+    navLinks.forEach(l => l.classList.remove('active'));
+    this.classList.add('active');
   });
-</script>
+});
+</script> -->
+
 

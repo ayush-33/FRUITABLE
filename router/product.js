@@ -53,32 +53,37 @@ router.get("/search", async (req, res) => {
   } catch (err) {
     console.error("Search error:", err);
     req.flash("error", "Something went wrong while searching.");
-    res.redirect("/product");
+    res.redirect("/");
   }
 });
 
-router.get("/category", async (req, res) => {
-  try {
-    const category = req.query.category;
-    let filter = { isFresh: false }; // same filter for consistency
+// router.get("/category", async (req, res) => {
+//   try {
+//     const category = req.query.category;
 
-    if (category) {
-      filter.category = { $regex: `^${category}$`, $options: 'i' };
-    }
+//     let filter = { isFresh: false };
+//     if (category) {
+//       filter.category = { $regex: `^${category}$`, $options: "i" };
+//     }
 
-    const products = await Product.find(filter);
-    res.json(products);
-  } catch (err) {
-    console.error("Error in /product/category API:", err);
-    res.status(500).json({ error: "Internal Server Error" });
-  }
-});
+//     const allitems = await Product.find(filter);
+//     const freshItems = await Product.find({ isFresh: true });
+
+//     // ✅ add category here
+//     res.render("products/index.ejs", { allitems, freshItems, category });
+//   } catch (err) {
+//     console.error("Error in /product/category route:", err);
+//     req.flash("error", "Unable to load products");
+//     res.redirect("/");
+//   }
+// });
+
 
 
 
 router.route("/")
-//index route
-.get(wrapAsync(productController.index))
+//index router
+// .get(wrapAsync(productController.index))
 //post route
 .post(isLoggedIn,validateProduct,wrapAsync(productController.createProduct));
 
@@ -100,5 +105,31 @@ router.route("/:id")
 
 //edit form 
 router.get("/:id/edit",isLoggedIn,wrapAsync(productController.renderEditForm))
+
+// router.get("/api/products", async (req, res) => {
+//   try {
+//     const products = await Product.find({ isFresh: false }); // or {} for all products
+//     res.json(products);
+//   } catch (err) {
+//     res.status(500).json({ error: "Internal Server Error" });
+//   }
+// });
+
+// router.get("/api/products", async (req, res) => {
+//   try {
+//     const category = req.query.category || "";
+//     let filter = { isFresh: false };
+
+//     if (category) {
+//       filter.category = { $regex: `^${category}$`, $options: "i" };
+//     }
+
+//     const products = await Product.find(filter);
+//     res.json(products);
+//   } catch (err) {
+//     console.error("Error in /api/products route:", err);
+//     res.status(500).json({ error: "Internal Server Error" });
+//   }
+// });
 
 module.exports = router;

@@ -14,7 +14,7 @@ module.exports.signup = async (req, res, next) => {
     await User.register(user, password);
 
     req.flash("success", "Welcome to Fruitable!");
-    const redirectUrl = req.session.returnTo || "/product";
+    const redirectUrl = req.session.returnTo || "/";
     delete req.session.returnTo;
     res.redirect(redirectUrl);
 
@@ -44,10 +44,24 @@ module.exports.renderLogin = (req,res) => {
 
 
 module.exports.login = (req, res) => {
-  // console.log("Login page requested");
-  const redirectUrl = req.cookies.returnTo || "/product";
-  res.clearCookie("returnTo"); // Clean up after use
-  // console.log(" Redirecting to:", redirectUrl);
+  let redirectUrl = req.cookies.returnTo || "/";
+
+  // Avoid redirecting to API endpoints (JSON returning routes)
+  if (
+    redirectUrl.startsWith("/product/category") ||
+    redirectUrl.startsWith("/product/shop/api") ||
+    redirectUrl.startsWith("/api") ||
+    redirectUrl.endsWith(".json")
+  ) {
+    // If user was on home page ("/") before login, keep them there
+    if (req.get("Referer") && req.get("Referer").endsWith("/")) {
+      redirectUrl = "/";
+    } else {
+      redirectUrl = "/product/shop";
+    }
+  }
+
+  res.clearCookie("returnTo");
   req.flash("success", "Welcome back!");
   res.redirect(redirectUrl);
 };
@@ -60,6 +74,6 @@ module.exports.logout = (req,res) => {
             return next(err);
         }
         req.flash("success","Logged you out!");
-        res.redirect("/product");
+        res.redirect("/");
     });
 };

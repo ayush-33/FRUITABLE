@@ -98,7 +98,7 @@ module.exports.confirmOrder = async (req, res) => {
     delete req.session.tempOrder;
 
     req.flash("success", "🎉 Congratulations! Your order has been placed successfully.");
-    return res.redirect("/product"); // redirect to home page
+    return res.redirect("/"); // redirect to home page
 
   } catch (err) {
     console.error("Order POST Error:", err);

@@ -50,6 +50,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function applyPriceFilter() {
+     if (!priceRange || !priceValue) return; 
     const selectedPrice = parseInt(priceRange.value);
     const rangeWindow = 10;
     priceValue.textContent = selectedPrice;
@@ -111,10 +112,13 @@ document.addEventListener('DOMContentLoaded', () => {
       productRow.innerHTML = html;
 
       // Always reset price slider to 0 on category/page change
-      priceRange.value = '0';
-      priceValue.textContent = '0';
-      localStorage.setItem('shopPriceSlider', '0');
-      applyPriceFilter();
+// Always reset price slider to 0 on category/page change
+if (priceRange && priceValue) {
+  priceRange.value = '0';
+  priceValue.textContent = '0';
+  localStorage.setItem('shopPriceSlider', '0');
+  applyPriceFilter();
+}
 
       renderPagination(data.currentPage, data.totalPages, category);
 

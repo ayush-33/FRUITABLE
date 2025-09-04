@@ -7,21 +7,31 @@ const Review = require("./models/review.js");
 
 module.exports.isLoggedIn = (req, res, next) => {
   if (!req.isAuthenticated()) {
-    if (req.method === "GET") {
-      res.cookie("returnTo", req.originalUrl, { httpOnly: true });
-    //   console.log(" [ReturnTo Cookie - GET] Stored:", req.originalUrl);
+    const isAPI = req.originalUrl.startsWith("/api") || req.originalUrl.startsWith("/category");
+    const isAjax = req.xhr || (req.headers.accept && req.headers.accept.includes("application/json"));
+
+    console.log("isLoggedIn called on:", req.originalUrl, "isAPI:", isAPI, "isAjax:", isAjax);
+
+    if (!isAPI && !isAjax) {
+      if (req.method === "GET") {
+        console.log("Saving returnTo as (GET):", req.originalUrl);
+        res.cookie("returnTo", req.originalUrl, { httpOnly: true });
+      } else if (req.method === "POST") {
+        const returnTo = req.body.returnTo || req.get("Referer") || "/";
+        console.log("Saving returnTo as (POST):", returnTo);
+        res.cookie("returnTo", returnTo, { httpOnly: true }); 
+      }
     } else if (req.method === "POST") {
-      const returnTo = req.body.returnTo || req.get("Referer") || "/product";
-      res.cookie("returnTo", returnTo, { httpOnly: true });
-    //   console.log("🍪 [ReturnTo Cookie - POST] Stored:", returnTo);
+      const returnTo = req.get("Referer") || "/";
+      console.log("Saving returnTo as (API POST Referer):", returnTo);
+      res.cookie("returnTo", returnTo, { httpOnly: true }); 
     }
+
     req.flash("error", "You must be logged in first");
     return res.redirect("/login");
   }
   next();
 };
-
-
 
 
 //middleware to check product schema
