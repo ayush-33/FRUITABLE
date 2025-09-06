@@ -23,16 +23,16 @@ module.exports.signup = async (req, res, next) => {
 
     if (err.name === "UserExistsError") {
       req.flash("error", "Username already exists. Please login or use a different username.");
-      return res.redirect("/login");
+      return res.redirect("/user/login");
     }
 
     if (err.code === 11000 && err.keyPattern && err.keyPattern.email) {
       req.flash("error", "Email already registered. Please login.");
-      return res.redirect("/login");
+      return res.redirect("/user/login");
     }
 
     req.flash("error", err.message);
-    res.redirect("/signup");
+    res.redirect("/user/signup");
   }
 };
 
@@ -44,27 +44,33 @@ module.exports.renderLogin = (req,res) => {
 
 
 module.exports.login = (req, res) => {
-  let redirectUrl = req.cookies.returnTo || "/";
+  let redirectUrl = req.session.returnTo || req.cookies.returnTo || "/";
 
-  // Avoid redirecting to API endpoints (JSON returning routes)
+  // Prevent redirecting to API/JSON endpoints
   if (
-    redirectUrl.startsWith("/product/category") ||
-    redirectUrl.startsWith("/product/shop/api") ||
     redirectUrl.startsWith("/api") ||
+    redirectUrl.startsWith("/product/shop/api") ||
     redirectUrl.endsWith(".json")
   ) {
-    // If user was on home page ("/") before login, keep them there
-    if (req.get("Referer") && req.get("Referer").endsWith("/")) {
-      redirectUrl = "/";
-    } else {
-      redirectUrl = "/product/shop";
-    }
+    redirectUrl = "/product/shop"; // or your dashboard/home page
+  }
+
+  // Prevent looping back to auth pages
+  if (
+    redirectUrl === "/user/login" ||
+    redirectUrl === "/user/signup" ||
+    redirectUrl === "/user/logout"
+  ) {
+    redirectUrl = "/";
   }
 
   res.clearCookie("returnTo");
+  delete req.session.returnTo;
+
   req.flash("success", "Welcome back!");
   res.redirect(redirectUrl);
 };
+
 
 
 

@@ -6,7 +6,7 @@ const Order = require("../models/orders");
 module.exports.renderCart = async (req, res) => {
   if (!req.user) {
     req.flash("error", "You must be logged in to view your cart");
-    return res.redirect("/login");
+    return res.redirect("/user/login");
   }
 
   try {
@@ -33,7 +33,7 @@ module.exports.addToCart = async (req, res) => {
     // If user is not logged in, redirect to login
     if (!req.user) {
       req.flash("error", "You must be logged in to add to cart");
-      return res.redirect("/login");
+      return res.redirect("/user/login");
     }
 
     // If user is logged in

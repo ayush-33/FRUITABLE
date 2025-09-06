@@ -584,68 +584,46 @@
 </div>
 
 <!-- Category Batch -->
- <div class="section-header"> <h1 class="section-title" >Our Organic <br>Products</h1>
-<div class="category-buttons">
-  <a class="anchor" href="/">
-    <button class="category-btn <%= !category ? 'active' : '' %>">All Products</button>
-  </a>
-  <a class="anchor" href="/?category=Vegetable">
-    <button class="category-btn <%= category === 'Vegetable' ? 'active' : '' %>">Vegetable</button>
-  </a>
-  <a class="anchor" href="/?category=Fruit">
-    <button class="category-btn <%= category === 'Fruit' ? 'active' : '' %>">Fruit</button>
-  </a>
-  <a class="anchor" href="/?category=Bread">
-    <button class="category-btn <%= category === 'Bread' ? 'active' : '' %>">Bread</button>
-  </a>
-  <a class="anchor" href="/?category=Meat">
-    <button class="category-btn <%= category === 'Meat' ? 'active' : '' %>">Meat</button>
-  </a>
+<div class="section-header">
+  <h1 class="section-title">Our Organic <br>Products</h1>
+  <div class="category-buttons">
+    <button class="category-btn <%= !category ? 'active' : '' %>" data-category="">All Products</button>
+    <button class="category-btn <%= category === 'Vegetable' ? 'active' : '' %>" data-category="Vegetable">Vegetable</button>
+    <button class="category-btn <%= category === 'Fruit' ? 'active' : '' %>" data-category="Fruit">Fruit</button>
+    <button class="category-btn <%= category === 'Bread' ? 'active' : '' %>" data-category="Bread">Bread</button>
+    <button class="category-btn <%= category === 'Meat' ? 'active' : '' %>" data-category="Meat">Meat</button>
+  </div>
 </div>
- </div>
-
-
 
 <!-- Cards -->
-<div class="outer-card" id="static-products">
+<div class="outer-card">
   <div class="container">
-    <div class="row mt-3"  >
-
-      <% if (allitems && allitems.length > 0) { %>
-        <% allitems.forEach(product => { %>
-          <div class="col-md-6 col-lg-4 product-card-container">
-            <a href="/product/<%= product._id %>" class="product-links">
-              <div class="card product-card mb-4 h-100">
-                <div class="image-container">
-                  <img
-                    src="<%= product.image && product.image.url ? product.image.url : '/img/default.jpg' %>"
-                    alt="Product Image"
-                    class="card-img-top"
-                  />
-                  <span class="category-badge"><%= product.category || 'Uncategorized' %></span>
-                </div>
-                <div class="card-body">
-                  <h5 class="card-title"><b><%= product.name || 'No name' %></b></h5>
-                  <p class="card-text text-center description">
-                    <%= product.description || 'No description' %>
-                  </p>
-                  <p class="price">
-                    <b> &#8377;<%= product.price ? Number(product.price).toFixed(2) : '0.00' %> / kg </b>
-                  </p>
-                </div>
+    <div class="row mt-3" id="product-client">
+      <% allitems.forEach(product => { %>
+        <div class="col-md-6 col-lg-4 product-card-container">
+          <a href="/product/<%= product._id %>" class="product-links">
+            <div class="card product-card mb-4 h-100">
+              <div class="image-container">
+                <img src="<%= product.image?.url || '/img/default.jpg' %>" alt="Product Image" class="card-img-top" />
+                <span class="category-badge"><%= product.category || 'Uncategorized' %></span>
               </div>
-            </a>
-          </div>
-        <% }) %>
-      <% } else { %>
-        <div class="col-12">
-          <p class="text-center">No products found</p>
+              <div class="card-body">
+                <h5 class="card-title"><b><%= product.name %></b></h5>
+                <p class="card-text text-center description"><%= product.description || 'No description' %></p>
+                <p class="price"><b>&#8377;<%= product.price.toFixed(2) %> / kg</b></p>
+              </div>
+            </div>
+          </a>
         </div>
-      <% } %>
+      <% }) %>
+    </div>
 
+    <div id="no-products-message" style="display:none; text-align:center; margin-top:20px;">
+      <p class="fw-bold text-danger">No products found.</p>
     </div>
   </div>
 </div>
+
 
 
 <!-- After Section Offer -->

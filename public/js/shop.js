@@ -1,6 +1,6 @@
 document.addEventListener('DOMContentLoaded', () => {
   const productRow = document.getElementById('product-row');
-  const sortSelect = document.querySelector('.form-select');
+  const sortSelects = document.querySelectorAll('.form-select'); // now selects all dropdowns
   const priceRange = document.getElementById('price-range');
   const priceValue = document.getElementById('price-value');
   const noProductsMessage = document.getElementById('no-products-message');
@@ -50,7 +50,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function applyPriceFilter() {
-     if (!priceRange || !priceValue) return; 
+    if (!priceRange || !priceValue) return;
     const selectedPrice = parseInt(priceRange.value);
     const rangeWindow = 10;
     priceValue.textContent = selectedPrice;
@@ -61,7 +61,6 @@ document.addEventListener('DOMContentLoaded', () => {
     cards.forEach(card => {
       const priceEl = card.querySelector('.price');
       const productPrice = priceEl ? parseFloat(priceEl.getAttribute('data-price')) : 0;
-
       const inRange = selectedPrice === 0 || (
         productPrice >= (selectedPrice - rangeWindow) &&
         productPrice <= (selectedPrice + rangeWindow)
@@ -69,7 +68,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
       card.classList.toggle('d-flex', inRange);
       card.classList.toggle('d-none', !inRange);
-
       if (inRange) visibleCount++;
     });
 
@@ -95,9 +93,9 @@ document.addEventListener('DOMContentLoaded', () => {
         return;
       }
 
-      // Restore and apply sorting from localStorage
+      // Restore sorting from localStorage
       const savedSortingOrder = localStorage.getItem('shopSortingOrder') || '';
-      sortSelect.value = savedSortingOrder;
+      sortSelects.forEach(s => s.value = savedSortingOrder);
 
       // Sort the data array before rendering
       let sortedProducts = [...data.products];
@@ -111,14 +109,13 @@ document.addEventListener('DOMContentLoaded', () => {
       const html = sortedProducts.map((item, index) => buildProductHTML(item, index)).join('');
       productRow.innerHTML = html;
 
-      // Always reset price slider to 0 on category/page change
-// Always reset price slider to 0 on category/page change
-if (priceRange && priceValue) {
-  priceRange.value = '0';
-  priceValue.textContent = '0';
-  localStorage.setItem('shopPriceSlider', '0');
-  applyPriceFilter();
-}
+      // Reset price slider
+      if (priceRange && priceValue) {
+        priceRange.value = '0';
+        priceValue.textContent = '0';
+        localStorage.setItem('shopPriceSlider', '0');
+        applyPriceFilter();
+      }
 
       renderPagination(data.currentPage, data.totalPages, category);
 
@@ -132,15 +129,12 @@ if (priceRange && priceValue) {
     if (!paginationContainer) return;
 
     let html = '';
-
     if (currentPage > 1) {
       html += `<li class="page-item">
         <a class="page-link custom-page" data-page="${currentPage - 1}" data-category="${category}" href="#">«</a>
       </li>`;
     } else {
-      html += `<li class="page-item disabled">
-        <span class="page-link custom-page">«</span>
-      </li>`;
+      html += `<li class="page-item disabled"><span class="page-link custom-page">«</span></li>`;
     }
 
     for (let i = 1; i <= totalPages; i++) {
@@ -154,9 +148,7 @@ if (priceRange && priceValue) {
         <a class="page-link custom-page" data-page="${currentPage + 1}" data-category="${category}" href="#">»</a>
       </li>`;
     } else {
-      html += `<li class="page-item disabled">
-        <span class="page-link custom-page">»</span>
-      </li>`;
+      html += `<li class="page-item disabled"><span class="page-link custom-page">»</span></li>`;
     }
 
     paginationContainer.innerHTML = html;
@@ -166,20 +158,19 @@ if (priceRange && priceValue) {
         e.preventDefault();
         const page = link.getAttribute('data-page');
         const cat = link.getAttribute('data-category');
-        // Update URL for consistency and browser navigation
         history.pushState({}, '', cat ? `/product/shop?category=${cat}&page=${page}` : `/product/shop?page=${page}`);
         fetchAndRenderCategory(cat, page);
       });
     });
   }
 
-  // On page load, always use AJAX for all products/categories
+  // On page load
   const urlParams = new URLSearchParams(window.location.search);
   const initialCategory = urlParams.get('category') || '';
   const initialPage = parseInt(urlParams.get('page')) || 1;
   fetchAndRenderCategory(initialCategory, initialPage);
 
-  // Set active class for category buttons
+  // Category buttons
   categoryButtons.forEach(li => {
     li.classList.toggle('active', li.dataset.category === initialCategory);
     li.addEventListener('click', () => {
@@ -191,28 +182,33 @@ if (priceRange && priceValue) {
     });
   });
 
+  // Price filter
   priceRange?.addEventListener('input', () => {
     localStorage.setItem('shopPriceSlider', priceRange.value);
     applyPriceFilter();
   });
 
-  sortSelect?.addEventListener('change', () => {
-    localStorage.setItem('shopSortingOrder', sortSelect.value);
-    // Refetch current page/category with new sort order
-    const urlParams = new URLSearchParams(window.location.search);
-    const category = urlParams.get('category') || '';
-    const page = parseInt(urlParams.get('page')) || 1;
-    fetchAndRenderCategory(category, page);
+  // Sorting: bind all selects and sync
+  sortSelects.forEach(select => {
+    select.addEventListener('change', () => {
+      localStorage.setItem('shopSortingOrder', select.value);
+      sortSelects.forEach(s => {
+        if (s !== select) s.value = select.value;
+      });
+
+      const urlParams = new URLSearchParams(window.location.search);
+      const category = urlParams.get('category') || '';
+      const page = parseInt(urlParams.get('page')) || 1;
+      fetchAndRenderCategory(category, page);
+    });
   });
 
-  // Handle browser navigation (back/forward)
-  window.addEventListener('popstate', (event) => {
+  // Browser back/forward
+  window.addEventListener('popstate', () => {
     const params = new URLSearchParams(window.location.search);
     const category = params.get('category') || '';
     const page = parseInt(params.get('page')) || 1;
     fetchAndRenderCategory(category, page);
-    categoryButtons.forEach(li => {
-      li.classList.toggle('active', li.dataset.category === category);
-    });
+    categoryButtons.forEach(li => li.classList.toggle('active', li.dataset.category === category));
   });
 });

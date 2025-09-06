@@ -42,6 +42,7 @@ const reviewsRouter = require("./router/review.js");
 const cartRouter = require("./router/cart.js");
 const Cart = require("./models/cart.js");
 const orderRouter = require("./router/order.js");
+const apiRouter = require("./router/api.js");
 
 main()
   .then(() => {
@@ -142,8 +143,10 @@ app.use("/", homeRouter);
 app.use("/product",productRouter);
 app.use("/product/:id/reviews", reviewsRouter);
 app.use("/cart",cartRouter);
-app.use("/",userRouter);
+app.use("/user",userRouter);
 app.use("/order",orderRouter);
+
+app.use("/api",apiRouter);
 
 app.all("*", (req,res,next) => {
   next(new ExpressError(404,"Page not Found"));

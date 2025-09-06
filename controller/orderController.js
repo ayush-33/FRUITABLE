@@ -8,7 +8,7 @@ module.exports.preparePayment = async (req, res) => {
   try {
     if (!req.user) {
       req.flash("error", "Please log in to proceed");
-      return res.redirect("/login");
+      return res.redirect("/user/login");
     }
 
     const { name, phone, line1, city, state, pincode } = req.body;
@@ -62,7 +62,7 @@ module.exports.confirmOrder = async (req, res) => {
   try {
     if (!req.user) {
       req.flash("error", "Please log in to place an order");
-      return res.redirect("/login");
+      return res.redirect("/user/login");
     }
 
     const tempOrder = req.session.tempOrder;
