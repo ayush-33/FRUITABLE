@@ -60,7 +60,7 @@ router.get("/search", async (req, res) => {
 
 router.route("/")
 //index router
-// .get(wrapAsync(productController.index))
+
 //post route
 .post(isLoggedIn,validateProduct,wrapAsync(productController.createProduct));
 

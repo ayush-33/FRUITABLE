@@ -36,7 +36,8 @@
   position: relative;
   z-index: 1;
   flex: 1;
-  padding-right: 2rem;
+  /* padding-right: 2rem;
+   */
 }
 .tagline {
   color: orange;
@@ -52,10 +53,10 @@
   font-weight: bold;
   margin-left: 4rem;
 }
-.section-search{
+.section-search {
   display: flex;
   align-items: center;
-  margin: 4rem;
+   margin: 4rem 0 0 4rem;  /* top 4rem, left align with text */
   max-width: 450px;
   background: white;
   border-radius: 50px;
@@ -141,7 +142,7 @@
   margin-top: 120px !important;
 }
 .feature-box {
-  background-color: #f5f8fa;
+  background-color: #f3f5f7;
   border-radius: 10px;
   padding: 30px 20px;
   text-align: center;
@@ -247,11 +248,8 @@
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
 }
 .offer-img {
-  width: 290px ;
-  height: 230px;
-  vertical-align: middle;
-  object-fit: cover; 
-  background: white;
+  max-width: 100%;  /* shrink inside parent */
+  height: auto;     /* keep proportions */
 }
 .orange-bg {
   background-color: #fdb913;
@@ -352,7 +350,7 @@
   position: relative;
 }
 .sec-img {
-  width: 400px;
+  width: 100%;
 }
 .price-badge {
   position: absolute;
@@ -448,10 +446,14 @@
   font-weight: bold
 }
 .container.grey {
-  background-color: #f7f8fa; /* Outer background like your image */
+  background-color: #f3f5f7; /* Outer background like your image */
   padding: 50px 50px;
   border-radius: 15px;
 }
+.section-title br {
+  display: inline;  /* keep the line break on desktop */
+}
+
 
 @media (max-width: 480px) {
   .section {
@@ -476,19 +478,172 @@
   font-size: 1rem;
   margin-top: 1rem;
   font-weight: 400;
-  margin-left: 0;
-}.section-search{
+  margin-left: 4rem;
+  /* text-align: left; */
+}
+.buy-btn:hover {
+  background-color: rgb(135, 212, 20);
+  color: #fcb800;
+}
+.section-search{
   display: flex;
   align-items: center;
-  margin-top: 1rem;
-  margin-left: 0;
-  margin-bottom: 0.5rem;
-  max-width: 450px;
+  margin: 1rem auto;
+  max-width: 350px;
   background: white;
   border-radius: 50px;
   border: 2px solid orange;
   overflow: hidden;
 }
+.section-btn {
+  padding: 1rem 2rem;
+  background: #8cc64f;
+  color: white;
+  font-weight: bold;
+  border: none;
+  border-left: 2px solid orange;
+  border-radius: 50px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.section-btn:hover {
+  background: orange;
+}
+}
+/* Prevent overflow on phone screens */
+@media (max-width: 576px) {
+  .section-header {
+    display: block;
+    text-align: center;
+    padding: 0 15px !important;   
+  }
+
+   .section-title br {
+    display: none;   /* hide the <br> on phones */
+  }
+  
+  .section-title {
+    margin-left: 0;
+    font-size: 28px;
+    white-space: nowrap; /* keep text on one line */
+  }
+
+   .category-buttons {
+    display: flex;
+    flex-wrap: wrap;       /* allow breaking to new line */
+    justify-content: center;
+    gap: 10px;             /* smaller spacing */
+    margin: 0 auto;        /* reset the right margin */
+  }
+
+  .category-btn {
+    width: 100%;
+    max-width: 160px;
+  }
+
+  .category-btn:last-child {
+    grid-column: 1 / -1;
+    justify-self: center;
+  }
+}
+
+@media (max-width: 576px) {
+  .price-badge {
+    width: 90px;
+    height: 90px;
+    top: 5px;
+    left: 5px;
+  }
+
+  .image-header {
+    font-size: 60px;
+    left: 12px;
+  }
+
+  .price-info {
+    top: 20px;
+    left: 40px;
+  }
+}
+@media (max-width: 576px) {
+  .scroller .card {
+    min-width: 100%;   /* full width on phones */
+  }
+}
+
+@media (max-width: 576px) {
+  .carousel-control-prev,
+  .carousel-control-next {
+    width: 30px;
+    height: 30px;
+  }
+}
+/* Scroller fix for phones */
+@media (max-width: 576px) {
+  .d-flex.overflow-auto {
+    padding-left: 10px;
+    padding-right: 10px;
+  }
+
+  .d-flex.overflow-auto .product-card {
+    min-width: 220px !important;  /* smaller so it fits */
+    max-width: 80%;               /* keep inside safe zone */
+  }
+}
+@media (max-width: 576px) {
+  .right-section {
+    margin: 1.5rem auto 0 auto;  /* center horizontally */
+    max-width: 90%;              /* shrink so it fits nicely */
+    height: auto;                /* allow carousel height to adjust */
+  }
+
+  .carousel {
+    width: 100%;
+    height: auto;                /* keep aspect ratio */
+  }
+
+  .carousel-inner img {
+    height: auto;                /* prevent squishing */
+    object-fit: contain;         /* scale image inside carousel */
+  }
+}
+@media (max-width: 576px) {
+  /* Remove row gutter */
+  .outer-card {
+    padding: 0;
+  }
+  #product-client.row {
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+  }
+
+  /* Make column full width */
+  .product-card-container {
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+    flex: 0 0 100% !important;
+    max-width: 100% !important;
+    margin-bottom: 1rem;
+  }
+
+  /* Card style to match offer section */
+  .product-card {
+    width: 100% !important;
+    height: 400px;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+  }
+
+  .product-card img {
+    width: 100%;
+    height: 220px;
+    object-fit: cover;
+  }
+
+  .card-body {
+    text-align: center;
+  }
 }
 
 </style>
@@ -498,7 +653,7 @@
   <div class="left-section">
   <p class="tagline">100% Organic Foods</p>
   <h1>Organic Veggies & Fruits Foods</h1>
-  <div >
+  <div class="container">
     <form class="section-search" action="/product/search" method="GET">
     <input type="text" name="q" placeholder="Search" >
     <button class="section-btn" type="submit">Submit Now</button>
@@ -602,7 +757,7 @@
       <% allitems.forEach(product => { %>
         <div class="col-md-6 col-lg-4 product-card-container">
           <a href="/product/<%= product._id %>" class="product-links">
-            <div class="card product-card mb-4 h-100">
+            <div class="card product-card mb-2 h-100">
               <div class="image-container">
                 <img src="<%= product.image?.url || '/img/default.jpg' %>" alt="Product Image" class="card-img-top" />
                 <span class="category-badge"><%= product.category || 'Uncategorized' %></span>
@@ -702,7 +857,7 @@
         <h1 class="headline">Fresh Exotic Fruits</h1>
         <p class="subheadline">in Our Store</p>
         <p class="desc">Enjoy the freshness of handpicked exotic vegetables, sourced with care to bring health and taste to your table every day.</p>
-        <button class="buy-btn"><a href="/product">BUY</a></button>
+        <button class="buy-btn"><a href="/product/shop">BUY</a></button>
       </div>
       <div class="col-lg-6">
         <div class="img-pos">
@@ -755,3 +910,4 @@
       </div> 
     </div>
   </div>
+<script src="/js/script.js" defer></script>

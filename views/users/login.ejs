@@ -5,21 +5,28 @@
       display: block;
     }
 </style>
-<div class="row   mt-4">
-    <h1 class="col-6 offset-3">Login</h1>
-    <div class=" mt-2  col-6 offset-3">
-       <form action="/user/login" method="post" class="needs-validation" novalidate>
-        <div  class="mb-3">
-            <label for="username" class="form-label">Username</label>
-            <input name="username" id="username" type="text" class="form-control" required >
+<div class="container">
+  <div class="row mt-4">
+    <div class="col-12 col-md-6 offset-md-3">
+      <h1 class="text-center">Login</h1>
+    </div>
+
+    <div class="col-12 col-md-6 offset-md-3 mt-2">
+      <form action="/user/login" method="post" class="needs-validation" novalidate>
+        <div class="mb-3">
+          <label for="username" class="form-label">Username</label>
+          <input name="username" id="username" type="text" class="form-control" required>
         </div>
 
-        <div  class="mb-3">
-            <label for="password" class="form-label">Password</label>
-            <input name="password" id="password" type="password" class="form-control" required> 
+        <div class="mb-3">
+          <label for="password" class="form-label">Password</label>
+          <input name="password" id="password" type="password" class="form-control" required>
         </div>
-        <button class="btn btn-success">Login</button>
-       </form>
-       <a href="/user/signup" class="anchor">New to Fruitable? Create an Account</a>
-        </div>
+
+        <button class="btn btn-success w-100">Login</button>
+      </form>
+
+      <a href="/user/signup" class="anchor">New to Fruitable? Create an Account</a>
     </div>
+  </div>
+</div>

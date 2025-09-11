@@ -6,10 +6,19 @@ const Review = require("./models/review.js");
 
 module.exports.isLoggedIn = (req, res, next) => {
   if (!req.isAuthenticated()) {
-    if (req.method === "GET") {
-      console.log("[isLoggedIn] Saving returnTo (GET):", req.originalUrl);
-      req.session.returnTo = req.originalUrl;
+    const originalUrl = req.originalUrl;
+
+    // Skip API/json routes when saving returnTo
+    const isAPI = originalUrl.startsWith("/api") || originalUrl.includes("/shop/api");
+    const skipReturnTo = ["/login", "/signup", "/logout", "/user/login", "/user/signup", "/user/logout"];
+
+    if (!isAPI && !skipReturnTo.includes(originalUrl)) {
+      if (req.method === "GET") {
+        console.log("[isLoggedIn] Saving returnTo:", originalUrl);
+        req.session.returnTo = originalUrl;
+      }
     }
+
     req.flash("error", "You must be logged in first");
     return res.redirect("/user/login");
   }

@@ -8,6 +8,7 @@
   background-color: #f1f3f6;
   align-items: flex-start;
 }
+
 .address-section {
   background-color: white;
   padding: 20px;
@@ -15,23 +16,27 @@
   border-radius: 8px;
   width: 60%;
 }
+
 .summary-section {
   background-color: white;
   padding: 15px;
   box-shadow: 0 1px 6px rgba(0, 0, 0, 0.1);
   border-radius: 8px;
-  width: 35%; /* Reduced width */
-  max-height: 400px; /* Adjust height as per your design */
-  overflow-y: auto;  /* Scroll if too long */
+  width: 35%;
+  max-height: 400px;
+  overflow-y: auto;
 }
+
 .address-section h3, .summary-section h3 {
   margin-bottom: 20px;
 }
+
 .address-details label {
   display: block;
   margin-top: 10px;
   font-weight: bold;
 }
+
 .address-details input {
   width: 100%;
   padding: 8px;
@@ -39,31 +44,37 @@
   border: 1px solid #ccc;
   border-radius: 4px;
 }
+
 .cart-item-summary {
   display: flex;
   justify-content: space-between;
   border-bottom: 1px solid #eee;
   padding: 10px 0;
 }
+
 .cart-item-summary p {
   font-size: 16px;
   font-weight: 500;
 }
+
 .cart-text {
-  font-size: 17px; /* Increased font size */
-  font-weight: 600; /* Increased font weight */
+  font-size: 17px;
+  font-weight: 600;
   margin: 5px 0;
 }
+
 .green {
   color: green;
   font-weight: 600;
 }
+
 .total-amount {
   text-align: right;
-  font-size: 20px; /* Increased font size */
+  font-size: 20px;
   font-weight: bold;
   margin-top: 20px;
 }
+
 .confirm-btn {
   padding: 14px 28px;
   background-color: #fb641b;
@@ -75,6 +86,27 @@
   border-radius: 2px;
   margin-top: 20px;
   float: right;
+}
+
+/* ✅ Responsive for phone screens */
+@media (max-width: 768px) {
+  .order-summary-page form {
+    flex-direction: column; /* stack vertically */
+    gap: 15px;
+  }
+  .address-section,
+  .summary-section {
+    width: 100%; /* full width */
+    margin: 0;
+  }
+  .summary-section {
+    max-height: none; /* remove scroll */
+  }
+  .confirm-btn {
+    float: none;
+    width: 100%;
+    text-align: center;
+  }
 }
 </style>
 

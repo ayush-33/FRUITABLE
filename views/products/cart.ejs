@@ -7,7 +7,8 @@
   padding: 30px;
   background-color: #f1f3f6;
   align-items: flex-start;
-}    
+}
+
 .cart-container {
   width: 80%;
   background-color: white;
@@ -16,18 +17,22 @@
   border-radius: 8px;
   margin-left: 20px;
 }
+
 .price-details {
-background-color: white;
+  background-color: white;
   padding: 20px;
   box-shadow: 0 1px 6px rgba(0, 0, 0, 0.1);
   border-radius: 8px;
+  min-width: 250px;
 }
 
 .cart-item {
   display: flex;
   border-bottom: 1px solid #eee;
   padding: 20px 0;
+  flex-wrap: wrap; /* ✅ allow wrapping on small screens */
 }
+
 .product-side {
   display: flex;
   flex-direction: column;
@@ -42,9 +47,9 @@ background-color: white;
   margin-top: 10px;
 }
 
-
 .product-image img {
   width: 150px;
+  max-width: 100%; /* ✅ prevent overflow */
   height: auto;
   border-radius: 4px;
   margin-right: 20px;
@@ -52,6 +57,7 @@ background-color: white;
 
 .product-info {
   flex-grow: 1;
+  min-width: 200px;
 }
 
 .product-info h2 {
@@ -70,12 +76,6 @@ background-color: white;
   font-weight: 600;
   color: #212121;
   margin-top: 8px;
-}
-
-.quantity {
-  display: flex;
-  align-items: center;
-  margin-top: 14px;
 }
 
 .qty-btn {
@@ -125,64 +125,87 @@ background-color: white;
   font-weight: bold;
   border-radius: 2px;
 }
-.cart-text{
-    font-size: 17px !important;
-    font-weight: 500 !important;
-    color: black !important;
+
+.cart-text {
+  font-size: 17px !important;
+  font-weight: 500 !important;
+  color: black !important;
 }
+
 .cart-tag {
-    color: green !important;
-    font-size: 17px !important;
+  color: green !important;
+  font-size: 17px !important;
 }
+
 .green {
   color: green;
   font-weight: 500;
 }
+
+/* ✅ Responsive for Tablets and Phones */
+@media (max-width: 992px) {
+  .cart-page {
+    flex-direction: column; /* stack vertically */
+    padding: 15px;
+  }
+  .cart-container,
+  .price-details {
+    width: 100%;
+    margin: 0 0 20px 0; /* spacing between sections */
+  }
+  .cart-item {
+    flex-direction: column;
+    text-align: center;
+    align-items: center;
+  }
+  .product-info {
+    margin-top: 15px;
+  }
+  .place-order {
+    text-align: center;
+  }
+}
 </style>
+
 <div class="cart-page">
-<div class="cart-container">
-  <% cartItems.forEach(item => { %>
-  <div class="cart-item" data-cart-item-id="<%= item._id ? item._id : item.cartItemId %>">
-    <div class="product-side">
-    <div class="product-image">
-      <img src="<%= item.product.image.url %>" alt="Product image">
-    </div>
-    <div class="quantity">
-      <button class="qty-btn minus">−</button>
-      <span class="qty-count"><%= item.quantity %></span>
-      <button class="qty-btn plus">+</button>
+  <div class="cart-container">
+    <% cartItems.forEach(item => { %>
+      <div class="cart-item" data-cart-item-id="<%= item._id ? item._id : item.cartItemId %>">
+        <div class="product-side">
+          <div class="product-image">
+            <img src="<%= item.product.image.url %>" alt="Product image">
+          </div>
+          <div class="quantity">
+            <button class="qty-btn minus">−</button>
+            <span class="qty-count"><%= item.quantity %></span>
+            <button class="qty-btn plus">+</button>
+          </div>
+        </div>
+
+        <div class="product-info">
+          <h2 style="font-size: 24px;"><b><%= item.product.name %></b></h2>
+          <p class="cart-text"><%= item.product.description %></p>
+          <p class="cart-tag">Fruitable Assured</p>
+          <p class="price" data-price="<%= item.product.price %>">
+            <strong>Price:</strong> ₹<span class="product-total"><%= (item.product.price * item.quantity).toFixed(2) %></span>
+          </p>
+          <div class="item-actions">
+            <form action="/cart/delete/<%= item._id ? item._id : item.cartItemId %>" method="POST" class="delete-form">
+              <button type="submit" class="action-btn delete-btn">REMOVE</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    <% }) %>
+
+    <div class="place-order">
+      <form action="/cart/checkout" method="GET">
+        <button type="submit" class="order-btn">PLACE ORDER</button>
+      </form>
     </div>
   </div>
 
-       <div class="product-info">
-        <h2 style="font-size: 24px;"><b><%= item.product.name %></b></h2>
-      <p class="cart-text"><%= item.product.description %></p>
-        <p class="cart-tag">Fruitable Assured</p>
-
-        <p class="price" data-price="<%= item.product.price %>"><strong class="strong">Price: </strong> &nbsp;₹<span class="product-total"><%= (item.product.price * item.quantity).toFixed(2) %></span></p>
-
-
-        <div class="item-actions">
-          <form action="/cart/delete/<%= item._id ? item._id : item.cartItemId %>" method="POST" class="delete-form">
-  <button type="submit" class="action-btn delete-btn">REMOVE</button>
-</form>
-
-        </div>
-      </div>
-    </div>
-    
-    
-  <% }) %>
-
-  <div class="place-order">
-  <form action="/cart/checkout" method="GET">
-    <button type="submit" class="order-btn">PLACE ORDER</button>
-  </form>
-</div>
-</div>
-
-
-<div class="price-details">
+  <div class="price-details">
     <h3>PRICE DETAILS</h3>
     <hr />
     <p class="cart-text total-items">Price (<span id="total-items"><%= cartItems.length %></span> items): ₹<span id="total-price"></span></p>
@@ -192,3 +215,5 @@ background-color: white;
     <p class="cart-text"><strong>Total Price: ₹<span id="final-total-price"></span></strong></p>
   </div>
 </div>
+
+<script src="/js/cart.js" defer></script>
