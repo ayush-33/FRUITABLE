@@ -4,7 +4,9 @@ const wrapAsync = require("../utils/wrapAsync.js");
 const Product = require("../models/product.js");
 const {isLoggedIn,validateProduct} = require("../middleware.js");
 const productController = require("../controller/productController.js");
-
+const multer  = require('multer')
+const {storage} = require("../CloudConfig.js");
+const upload = multer({ storage })
 
 router.get('/contact', (req, res) => {
   res.render("products/contact.ejs", { currentRoute: "/product/contact"}); 
@@ -62,7 +64,7 @@ router.route("/")
 //index router
 
 //post route
-.post(isLoggedIn,validateProduct,wrapAsync(productController.createProduct));
+.post(isLoggedIn,upload.single("image"), validateProduct,wrapAsync(productController.createProduct));
 
 //shop
 router.get("/shop",wrapAsync(productController.renderShopPageSSR)); 
@@ -76,7 +78,7 @@ router.route("/:id")
 //show route
 .get(wrapAsync(productController.showProduct))
 //put route
-.put(isLoggedIn,validateProduct,wrapAsync(productController.updateProduct))
+.put(isLoggedIn,upload.single("image"),validateProduct,wrapAsync(productController.updateProduct))
 //delete route
 .delete(isLoggedIn, wrapAsync(productController.delete))
 

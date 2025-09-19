@@ -7,6 +7,8 @@ const path = require("path"); //for ejs
 const methodOverride = require("method-override");
 const ejsMate = require("ejs-mate");
 const ExpressError = require("./utils/ExpressError.js");
+require('dotenv').config();
+const dbUrl = process.env.ATLASDB_URL;
 
 //Redis
 const redis = require('redis');
@@ -51,9 +53,10 @@ main()
   .catch((err) => {
     console.log(err);
   });
+  
 
 async function main() {
-  await mongoose.connect(MONGO_URL);
+  await mongoose.connect(dbUrl);
 }
 
 app.engine("ejs", ejsMate);

@@ -6,6 +6,7 @@
       <form
         method="post"
         action="/product/<%= product._id%>?_method=PUT"
+        enctype="multipart/form-data"
         novalidate
         class="needs-validation"
       >
@@ -57,14 +58,16 @@
         </div>
 
         <div class="mb-3">
-          <label for="image" class="form-label">Enter URL</label>
-          <input
-            name="product[image][url]"
-            value="<%= product.image.url %>"
-            type="url"
-            class="form-control"
-          />
-        </div>
+  <label>Current Product Image</label>
+  <hr />
+  <img src="<%= product.image.url %>" alt="Product Image" class="img-fluid" style="max-width: 200px;" />
+</div>
+
+<div class="mb-3">
+  <label for="image" class="form-label">Upload New Product Image</label>
+  <input name="image" type="file" class="form-control" />
+</div>
+
 
         <div class="mb-3">
           <label for="price" class="form-label">Enter price</label>

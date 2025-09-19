@@ -113,6 +113,14 @@ module.exports.createProduct =  async (req, res, next) => {
     try {
         const newProduct = new Product(req.body.product);
         newProduct.owner = req.user._id;
+         if (req.file) {
+      newProduct.image = {
+        url: req.file.path,       // Cloudinary URL
+        filename: req.file.filename
+      };
+    }
+    console.log(req.file);
+
         await newProduct.save();
         req.flash("success", "New Product Created!");
         res.redirect("/");
@@ -121,23 +129,52 @@ module.exports.createProduct =  async (req, res, next) => {
     }
 };
 
-module.exports.renderEditForm =  async (req, res) => {
-    let { id } = req.params;
+module.exports.renderEditForm = async (req, res) => {
+  let { id } = req.params;
   const product = await Product.findById(id);
+
   if (!product) {
-        req.flash("error","Product you requested for does not exists");
-        res.redirect("/");
+    req.flash("error", "Product you requested for does not exist");
+    return res.redirect("/");
   }
-  res.render("products/edit.ejs", { product });
+
+  let originalImageUrl = product.image?.url || "";
+  let resizedImageUrl = originalImageUrl
+    ? originalImageUrl.replace("/upload", "/upload/h_300,w_250,c_fill")
+    : null;
+
+  res.render("products/edit.ejs", { product, resizedImageUrl });
 };
 
-module.exports.updateProduct =  async (req, res) => {
-    let { id } = req.params;
-    let product = await Product.findByIdAndUpdate(id, { ...req.body.product });
-    await product.save();
-      req.flash("success", "Product Updated!");
-    res.redirect(`/product/${id}`);
+
+module.exports.updateProduct = async (req, res) => {
+  const { id } = req.params;
+
+  // Find product first
+  const product = await Product.findById(id);
+  if (!product) {
+    req.flash("error", "Product not found!");
+    return res.redirect("/");
+  }
+
+  // Update fields from form
+  Object.assign(product, req.body.product);
+
+  // Update image if new file uploaded
+  if (req.file) {
+    product.image = {
+      url: req.file.path,
+      filename: req.file.filename
+    };
+  }
+
+  // Save updated product
+  await product.save();
+
+  req.flash("success", "Product Updated!");
+  res.redirect(`/product/${id}`);
 };
+
   
 module.exports.delete = async (req, res) => {
     let { id } = req.params;

@@ -115,7 +115,7 @@
     <h3>Order Summary</h3>
     <% tempOrder.items.forEach(item => { %>
       <div class="order-item">
-        <span><%= item.quantity %> x <%= item.productName %></span>
+        <span><%= item.quantity %> /Kg x <%= item.productName %></span>
         <span>₹<%= (item.price * item.quantity).toFixed(2) %></span>
       </div>
     <% }) %>
