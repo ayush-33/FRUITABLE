@@ -121,7 +121,7 @@ app.use((req, res, next) => {
 
 // Middleware to set current route for active link highlighting
 app.use((req, res, next) => {
-  res.locals.currentRoute = req.path;
+  res.locals.currentRoute = req.path || '/';
   next();
 });
 
