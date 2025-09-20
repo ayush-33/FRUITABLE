@@ -55,7 +55,7 @@ router.get("/search", async (req, res) => {
   } catch (err) {
     console.error("Search error:", err);
     req.flash("error", "Something went wrong while searching.");
-    res.redirect("/");
+   return  res.redirect("/");
   }
 });
 
