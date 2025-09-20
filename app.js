@@ -1,3 +1,6 @@
+if (process.env.NODE_ENV != "production") {
+  require("dotenv").config();
+}
 const express = require("express");
 const app = express();
 const mongoose = require("mongoose");
@@ -7,25 +10,33 @@ const path = require("path"); //for ejs
 const methodOverride = require("method-override");
 const ejsMate = require("ejs-mate");
 const ExpressError = require("./utils/ExpressError.js");
-require('dotenv').config();
+require("dotenv").config();
 const dbUrl = process.env.ATLASDB_URL;
 
-//Redis
-const redis = require('redis');
-const homeRouter = require('./router/home');
-const productRouter = require('./router/product');
+// Redis
+const redis = require("redis");
+const homeRouter = require("./router/home");
+const productRouter = require("./router/product");
 
-const client = redis.createClient();
-client.on('error', (err) => console.error('Redis Client Error', err));
+// ✅ Use Upstash Redis URL from .env
+const client = redis.createClient({
+  url: process.env.REDIS_URL,
+  socket: {
+    tls: true,
+    rejectUnauthorized: false, // avoids SSL cert errors with Upstash
+  },
+});
+
+client.on("error", (err) => console.error("Redis Client Error", err));
 
 // Start server only after Redis is connected
 (async () => {
   await client.connect();
-  console.log('✅ Redis connected!');
+  console.log("✅ Redis connected!");
   app.locals.redisClient = client;
 
   app.listen(3000, () => {
-    console.log("Listening to port");
+    console.log("🚀 Listening on port 3000");
   });
 })();
 
@@ -53,7 +64,6 @@ main()
   .catch((err) => {
     console.log(err);
   });
-  
 
 async function main() {
   await mongoose.connect(dbUrl);
@@ -66,30 +76,29 @@ app.use(express.urlencoded({ extended: true }));
 app.use(methodOverride("_method"));
 app.use(express.static(path.join(__dirname, "/public")));
 app.use(express.static("public"));
-app.use(express.json()); 
+app.use(express.json());
 
 const store = MongoStore.create({
-    mongoUrl : "mongodb://127.0.0.1:27017/Fruitable" ,
-    crypto : {
-    secret : "SecretCode",
-    },
-    touchAfter : 24 * 3600,
+  mongoUrl: "mongodb://127.0.0.1:27017/Fruitable",
+  crypto: {
+    secret: "SecretCode",
+  },
+  touchAfter: 24 * 3600,
 });
 store.on("error", (err) => {
-    console.log("error in mongodb store", err);
-})
-
+  console.log("error in mongodb store", err);
+});
 
 const sessionOptions = {
-    store ,
-    secret : "SecretCode",
-    resave : false,
-    saveUninitialized : false,
-    cookie : {
-        expires: Date.now() + 1000 * 7 * 24 * 60 * 60 ,
-        maxAge : 1000 * 7 * 24 * 60 * 60 ,
-        httpOnly : true
-    },
+  store,
+  secret: "SecretCode",
+  resave: false,
+  saveUninitialized: false,
+  cookie: {
+    expires: Date.now() + 1000 * 7 * 24 * 60 * 60,
+    maxAge: 1000 * 7 * 24 * 60 * 60,
+    httpOnly: true,
+  },
 };
 
 app.use(session(sessionOptions));
@@ -99,16 +108,15 @@ app.use(passport.initialize());
 app.use(passport.session());
 passport.use(new LocalStrategy(User.authenticate()));
 
-
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
 app.use((req, res, next) => {
-    res.locals.success = req.flash("success");
-    res.locals.error = req.flash("error");
-    res.locals.curUser = req.user;
-    res.locals.req = req; // Pass req to views for dynamic content
-    next();
+  res.locals.success = req.flash("success");
+  res.locals.error = req.flash("error");
+  res.locals.curUser = req.user;
+  res.locals.req = req; // Pass req to views for dynamic content
+  next();
 });
 
 // Middleware to set current route for active link highlighting
@@ -121,7 +129,10 @@ app.use((req, res, next) => {
 app.use(async (req, res, next) => {
   try {
     if (req.user) {
-      res.locals.cartCount = await Cart.countDocuments({ user: req.user._id, quantity: { $gt: 0 } });
+      res.locals.cartCount = await Cart.countDocuments({
+        user: req.user._id,
+        quantity: { $gt: 0 },
+      });
     } else {
       res.locals.cartCount = 0;
     }
@@ -134,7 +145,12 @@ app.use(async (req, res, next) => {
 
 // 🔑 Cookie-based returnTo middleware
 app.use((req, res, next) => {
-  if (!req.isAuthenticated() && req.method === "GET" && !req.path.startsWith("/login") && !req.path.startsWith("/signup")) {
+  if (
+    !req.isAuthenticated() &&
+    req.method === "GET" &&
+    !req.path.startsWith("/login") &&
+    !req.path.startsWith("/signup")
+  ) {
     res.cookie("returnTo", req.originalUrl, { httpOnly: true });
     // console.log("🍪 [ReturnTo Cookie] Stored:", req.originalUrl);
   }
@@ -143,20 +159,20 @@ app.use((req, res, next) => {
 
 //Router
 app.use("/", homeRouter);
-app.use("/product",productRouter);
+app.use("/product", productRouter);
 app.use("/product/:id/reviews", reviewsRouter);
-app.use("/cart",cartRouter);
-app.use("/user",userRouter);
-app.use("/order",orderRouter);
+app.use("/cart", cartRouter);
+app.use("/user", userRouter);
+app.use("/order", orderRouter);
 
-app.use("/api",apiRouter);
+app.use("/api", apiRouter);
 
-app.all("*", (req,res,next) => {
-  next(new ExpressError(404,"Page not Found"));
+app.all("*", (req, res, next) => {
+  next(new ExpressError(404, "Page not Found"));
 });
 
 //Error handling middleware
-app.use((err,req,res,next) => {
-  let {statusCode = 500,message = "Some Error Occured"} = err;
-  res.status(statusCode).render("error.ejs", {err});
+app.use((err, req, res, next) => {
+  let { statusCode = 500, message = "Some Error Occured" } = err;
+  res.status(statusCode).render("error.ejs", { err });
 });
