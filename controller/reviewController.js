@@ -2,7 +2,7 @@ const Product = require("../models/product");
 const Review = require("../models/review");
 const wrapAsync = require("../utils/wrapAsync");
 
-module.exports.createReview = wrapAsync(async (req, res) => {
+module.exports.createReview = async (req, res) => {
     const product = await Product.findById(req.params.id);
     if (!product) {
         req.flash("error", "Product not found");
@@ -17,9 +17,9 @@ module.exports.createReview = wrapAsync(async (req, res) => {
 
     req.flash("success", "New Review Created!");
     res.redirect(`/product/${product._id}`);
-});
+};
 
-module.exports.destroyReview = wrapAsync(async (req, res) => {
+module.exports.destroyReview = async (req, res) => {
     const { id, reviewId } = req.params;
     const review = await Review.findById(reviewId);
     if (!review) {
@@ -32,4 +32,4 @@ module.exports.destroyReview = wrapAsync(async (req, res) => {
 
     req.flash("success", "Review Deleted!");
     res.redirect(`/product/${id}`);
-});
+};

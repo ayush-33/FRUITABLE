@@ -2,7 +2,6 @@
   .nav-link {
   color: white;
 }
-
 .nav-link.active {
   color: #81c408 !important;
 }
@@ -11,7 +10,6 @@
   transition: max-height 0.3s ease;
   overflow: hidden;
 }
-
 .navbar-collapse.show {
   display: block;
 }
@@ -19,7 +17,7 @@
 </style>
 <nav class="navbar navbar-expand-lg sticky-top">
   <div class="container-fluid">
-    <a class="navbar-brand" href="/">Fruitables</a>
+    <a class="navbar-brand" href="/">Fruitable</a>
 <button class="navbar-toggler" type="button" aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">
   <span class="navbar-toggler-icon"></span>
 </button>
@@ -67,26 +65,26 @@
     </div>
   </div>
 </nav>
-
 <script>
 document.addEventListener('DOMContentLoaded', () => {
-  const toggler = document.querySelector('.navbar-toggler');
-  const collapse = document.querySelector('.navbar-collapse');
+  const navLinks = document.querySelectorAll('.navbar-nav .nav-link');
 
-  toggler.addEventListener('click', () => {
-    collapse.classList.toggle('show');
-    toggler.setAttribute('aria-expanded', collapse.classList.contains('show'));
-  });
+  // Set the initial active link based on current URL
+  const currentPath = window.location.pathname; 
+  navLinks.forEach(link => {
+    if (link.getAttribute('href') === currentPath) {
+      link.classList.add('active');
+    } else {
+      link.classList.remove('active');
+    }
 
-  document.querySelectorAll('.navbar-collapse .nav-link').forEach(link => {
+    // Add click listener to update active link immediately
     link.addEventListener('click', () => {
-      if (collapse.classList.contains('show')) {
-        collapse.classList.remove('show');
-        toggler.setAttribute('aria-expanded', false);
-      }
+      navLinks.forEach(l => l.classList.remove('active'));
+      link.classList.add('active');
     });
   });
 });
-
 </script>
+
 
