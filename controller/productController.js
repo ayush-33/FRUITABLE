@@ -24,7 +24,7 @@ const pluralize = require('pluralize');
 
 
 module.exports.renderForm = (req, res) => {
-    res.render("products/new.ejs", { currentRoute: "/product/new" });
+    res.render("products/new.ejs");
 };
 
 module.exports.renderShopPageSSR = async (req, res) => {

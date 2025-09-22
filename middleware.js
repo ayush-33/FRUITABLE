@@ -52,7 +52,7 @@ module.exports.isOwner = async (req,res,next) => {
     let {id} = req.params;
     let product = await Product.findById(id);
     //check if user is owner of listed product or not
-    if(!product.owner._idequals(res.locals.curUser._id)){
+    if(!product.owner._id.equals(res.locals.curUser._id)){
         req.flash("error","You are not the owner of this listed Product");
         return res.redirect(`/product/${id}`);
     }

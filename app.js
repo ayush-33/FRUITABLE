@@ -79,9 +79,9 @@ app.use(express.static("public"));
 app.use(express.json());
 
 const store = MongoStore.create({
-  mongoUrl: "mongodb://127.0.0.1:27017/Fruitable",
+  mongoUrl: dbUrl,
   crypto: {
-    secret: "SecretCode",
+    secret: process.env.SECRET,
   },
   touchAfter: 24 * 3600,
 });
