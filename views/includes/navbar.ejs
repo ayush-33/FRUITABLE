@@ -1,3 +1,4 @@
+
 <style>
   .nav-link {
   color: white;
@@ -6,13 +7,13 @@
   color: #81c408 !important;
 }
 .navbar-collapse {
-  display: none;
+  /* display: none; */
   transition: max-height 0.3s ease;
   overflow: hidden;
 }
-.navbar-collapse.show {
+/* .navbar-collapse.show {
   display: block;
-}
+} */
 
 </style>
 <nav class="navbar navbar-expand-lg sticky-top">
@@ -68,23 +69,29 @@
 <script>
 document.addEventListener('DOMContentLoaded', () => {
   const navLinks = document.querySelectorAll('.navbar-nav .nav-link');
+  const toggler = document.querySelector('.navbar-toggler');
+  const navbarContent = document.getElementById('navbarContent');
 
-  // Set the initial active link based on current URL
+  // ✅ Handle active link
   const currentPath = window.location.pathname; 
   navLinks.forEach(link => {
     if (link.getAttribute('href') === currentPath) {
       link.classList.add('active');
-    } else {
-      link.classList.remove('active');
     }
-
-    // Add click listener to update active link immediately
     link.addEventListener('click', () => {
       navLinks.forEach(l => l.classList.remove('active'));
       link.classList.add('active');
+      navbarContent.classList.remove('show'); // close menu after click (mobile)
     });
+  });
+
+  // ✅ Handle toggle open/close
+  toggler.addEventListener('click', () => {
+    navbarContent.classList.toggle('show');
   });
 });
 </script>
+
+
 
 

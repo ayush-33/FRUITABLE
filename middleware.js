@@ -26,8 +26,6 @@ module.exports.isLoggedIn = (req, res, next) => {
 };
 
 
-
-
 //middleware to check product schema
 module.exports.validateProduct = (req,res,next) => {
     let  {error} = productSchema.validate(req.body) ; //checking schema condition
@@ -60,7 +58,7 @@ module.exports.isOwner = async (req,res,next) => {
 }
 
 module.exports.validateReview = (req,res,next) => {
-    let {error} = reviewSchema.validate(req.body);
+    let {error} = reviewSchema.validate(req.body.review);
     if (error) {
         let errMsg = error.details.map(el => el.message).join(", ");
         throw new ExpressError(400,errMsg);

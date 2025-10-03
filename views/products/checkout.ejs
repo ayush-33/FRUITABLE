@@ -164,3 +164,13 @@
     </div>
   </form>
 </div>
+<script>
+  const form = document.querySelector("form");
+  const btn = document.querySelector(".confirm-btn");
+
+  form.addEventListener("submit", function() {
+    // Disable the button immediately after submitting
+    btn.disabled = true;
+    btn.innerText = "Processing..."; // optional
+  });
+</script>
